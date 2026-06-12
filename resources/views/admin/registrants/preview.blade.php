@@ -15,58 +15,289 @@
     } catch (\Throwable $e) {
         // ignore
     }
-    $logo = !empty($settings['app_logo']) ? asset('storage/' . ltrim($settings['app_logo'], '/')) : asset('images/logo.png');
+    $logo = asset('images/logo_formulir.png');
 
     $photoUrl = null;
-    if (!empty($d['photo_path'])) {
+    // Priority: photo_data (base64) > photo_path (existing) > none
+    if (!empty($d['photo_data']) && strpos($d['photo_data'], 'data:image') === 0) {
+        $photoUrl = $d['photo_data'];
+    } elseif (!empty($d['photo_path'])) {
         $photoUrl = asset('storage/' . ltrim($d['photo_path'], '/'));
     }
 
     $emergencies = [];
     if (!empty($d['emergency_contacts'])) {
-        if (is_array($d['emergency_contacts'])) $emergencies = $d['emergency_contacts'];
-        else $emergencies = preg_split('/\r?\n/', $d['emergency_contacts']);
+        if (is_string($d['emergency_contacts'])) {
+            $decoded = json_decode($d['emergency_contacts'], true);
+            $emergencies = is_array($decoded) ? $decoded : [];
+        } elseif (is_array($d['emergency_contacts'])) {
+            $emergencies = $d['emergency_contacts'];
+        }
     }
+
+    // Function to format date to Indonesian
+    $formatDateID = function ($dateStr) {
+        if (empty($dateStr)) {
+            return '-';
+        }
+        try {
+            $date = \Carbon\Carbon::parse($dateStr);
+            $months = [
+                'Januari',
+                'Februari',
+                'Maret',
+                'April',
+                'Mei',
+                'Juni',
+                'Juli',
+                'Agustus',
+                'September',
+                'Oktober',
+                'November',
+                'Desember',
+            ];
+            return $date->day . ' ' . $months[$date->month - 1] . ' ' . $date->year;
+        } catch (\Exception $e) {
+            return $dateStr;
+        }
+    };
 @endphp
 
-<!doctype html>
-<div>
-    <style>
-        @page { size: A4; margin: 10mm; }
-        body { font-family: 'Times New Roman', Times, serif; font-size: 11pt; color:#111; }
-        .page { width:210mm; min-height:297mm; background:#fff; padding:10mm; }
-        .header { display:flex; gap:12px; align-items:center; padding-bottom:8px; margin-bottom:12px; }
-        .header-logo img{width:60px;height:60px;object-fit:contain}
-        .header-text .company-name{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:12pt}
-        .form-title{text-align:center;font-weight:700;margin:12px 0;text-decoration:underline;font-size:13pt}
-        .section-title{font-weight:700;color:#000;background:#4a90e2;margin:12px 0 8px;padding:6px 8px;display:inline-block;min-width:200px}
-        .info-table{width:100%;border-collapse:collapse;margin-bottom:8px}
-        .info-table td{padding:4px 6px;vertical-align:top}
-        .info-table .label{width:38%;font-weight:600}
-        .info-table .separator{width:3%;text-align:center}
-        .notes-list{list-style:none;padding-left:0}
-        .notes-list li{padding:3px 0 3px 16px;position:relative}
-        .notes-list li::before{content:'•';position:absolute;left:4px}
-        .no-print{display:block}
-        .nested-row{padding-left:24px;font-size:10.5pt}
-        .checkbox-group{display:flex;gap:12px;margin-bottom:8px}
-        .checkbox-item{display:flex;align-items:center;gap:6px}
-        .checkbox-item input{width:14px;height:14px}
-    </style>
+<title>Jamaah_AlAhza_{{ $d['name'] ?? 'Jamaah' }}</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-    <div class="print-toolbar no-print" style="position:fixed;top:16px;right:16px;z-index:120">
-        <a href="{{ route('admin.registrants.index') }}" class="btn-back" style="margin-right:8px;padding:8px 12px;background:#f1f5f9;border:1px solid #e2e8f0;text-decoration:none;color:#333">Kembali</a>
-        <button onclick="window.print()" class="btn-print" style="padding:8px 12px;background:#ea580c;color:#fff;border:0">Cetak / Simpan PDF</button>
-    </div>
+    @page {
+        size: A4;
+        margin: 7mm;
+    }
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+    }
+
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 12pt;
+        color: #111;
+        background: #f5f5f5;
+    }
+
+    .page {
+        width: 210mm;
+        min-height: 297mm;
+        background: #fff;
+        padding: 10mm;
+        margin: 5px auto;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding-bottom: 8px;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #ddd;
+    }
+
+    .header-left {
+        flex: 0 0 auto;
+    }
+
+    .header-right {
+        flex: 0 0 auto;
+    }
+
+    .header-logo img {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+    }
+
+    .header-text .company-name {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: 700;
+        font-size: 12pt;
+    }
+
+    .form-title {
+        text-align: center;
+        font-weight: 700;
+        margin: 8px 0 6px;
+        text-decoration: underline;
+        font-size: 14pt;
+        letter-spacing: 0.5px;
+    }
+
+    .section-title {
+        font-weight: 700;
+        color: #000;
+        background: #87CEEB;
+        margin: 8px 0 4px;
+        padding: 2px 8px;
+        display: block;
+        width: 100%;
+        font-size: 12.5pt;
+        border-radius: 2px;
+    }
+
+    .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 3px;
+        table-layout: fixed;
+    }
+
+    .info-table td {
+        padding: 2px 4px;
+        vertical-align: top;
+        font-size: 11pt;
+        line-height: 1.3;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .info-table .label {
+        width: 38%;
+        font-weight: 500;
+    }
+
+    .info-table .separator {
+        width: 2%;
+        text-align: center;
+        white-space: nowrap;
+        padding: 4px 2px;
+    }
+
+    .notes-list {
+        list-style: decimal inside;
+        padding-left: 8px;
+        margin: 4px 0;
+        font-weight: bold;
+    }
+
+    .notes-list li {
+        padding: 1px 0;
+        font-size: 11pt;
+    }
+
+    .no-print {
+        display: block;
+    }
+
+    .nested-row {
+        padding-left: 24px;
+        font-size: 10.5pt;
+    }
+
+    .package-section {
+        margin-bottom: 4px;
+        font-size: 11.5pt;
+    }
+
+    .package-label {
+        font-weight: 600;
+        display: inline-block;
+        margin-right: 12px;
+    }
+
+    .package-boxes {
+        display: none;
+    }
+
+    .package-value {
+        font-weight: 500;
+        display: inline-block;
+    }
+
+    .package-box {
+        padding: 6px 12px;
+        border: 1.5px solid #666;
+        border-radius: 3px;
+        font-weight: 600;
+        text-align: center;
+        min-width: 70px;
+        background: #fff;
+    }
+
+    .package-box.selected {
+        background: #87CEEB;
+        color: #000;
+        border-color: #0066cc;
+    }
+
+    .package-box.unselected {
+        background: #fff;
+        color: #666;
+    }
+
+    @media print {
+
+        html,
+        body {
+            background: transparent;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page {
+            width: 100%;
+            height: auto;
+            min-height: 100%;
+            margin: 0;
+            padding: 7mm;
+            box-shadow: none;
+            page-break-after: always;
+            background: white;
+        }
+
+        .no-print {
+            display: none !important;
+        }
+
+        /* Ensure all colors and styles are preserved for print */
+        * {
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        .section-title {
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        .package-box.selected {
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    }
+</style>
+</head>
+
+<body>
 
     <div class="page">
         <div class="header">
-            <div class="header-logo">
-                <img src="{{ $logo }}" alt="logo">
+            <div class="header-left">
+                <div class="header-logo">
+                    <img src="{{ $logo }}" alt="logo">
+                </div>
             </div>
-            @if($photoUrl)
-                <div style="margin-left:auto">
-                    <img src="{{ $photoUrl }}" alt="photo" style="height:80px;width:60px;object-fit:cover;border:1px solid #999;border-radius:2px">
+            @if ($photoUrl)
+                <div class="header-right">
+                    <img src="{{ $photoUrl }}" alt="photo"
+                        style="height:180px;width:155px;object-fit:cover;border:1px solid #999;border-radius:2px">
                 </div>
             @endif
         </div>
@@ -74,49 +305,108 @@
         <div class="form-title">FORM PENDAFTARAN UMRAH</div>
 
         <div class="section-title">A. PAKET PILIHAN</div>
-        <div class="checkbox-group">
-            <div class="checkbox-item">
-                <input type="checkbox" {{ ($d['package_option'] ?? '') === 'Double' ? 'checked' : '' }}>
-                <span>Double</span>
-            </div>
-            <div class="checkbox-item">
-                <input type="checkbox" {{ ($d['package_option'] ?? '') === 'Triple' ? 'checked' : '' }}>
-                <span>Triple</span>
-            </div>
-            <div class="checkbox-item">
-                <input type="checkbox" {{ ($d['package_option'] ?? '') === 'Quad' ? 'checked' : '' }}>
-                <span>Quad</span>
-            </div>
+        <div class="package-section">
+            <span class="package-label">PAKET UMRAH:</span>
+            <span class="package-value">{{ $d['package_option'] ?? '-' }}</span>
         </div>
 
         <div class="section-title">B. DATA JAMAAH UMRAH</div>
         <table class="info-table">
-            <tr><td class="label">1. Nama sesuai Paspor</td><td class="separator">:</td><td class="value">{{ $d['name'] ?? '-' }}</td></tr>
-            <tr><td colspan="3" class="label" style="font-weight:600">2. Data Paspor:</td></tr>
-            <tr><td colspan="3" class="nested-row">No Paspor: {{ $d['passport_no'] ?? '-' }}</td></tr>
-            <tr><td colspan="3" class="nested-row">Tanggal dikeluarkan: {{ $d['passport_issued_date'] ?? '-' }}</td></tr>
-            <tr><td colspan="3" class="nested-row">Tempat dikeluarkan: {{ $d['passport_issued_place'] ?? '-' }}</td></tr>
-            <tr><td colspan="3" class="nested-row">Masa berlaku: {{ ($d['passport_expiry_date'] ?? '-') }} s/d {{ ($d['passport_expiry_date'] ?? '-') }}</td></tr>
-            <tr><td class="label">3. Tempat & Tanggal Lahir</td><td class="separator">:</td><td class="value">{{ $d['birth_place'] ?? '-' }} / {{ $d['birth_date'] ?? '-' }}</td></tr>
-            <tr><td class="label">4. Jenis Kelamin</td><td class="separator">:</td><td class="value">{{ $d['gender'] ?? '-' }}</td></tr>
-            <tr><td class="label">5. Alamat Domisili</td><td class="separator">:</td><td class="value">{{ $d['address'] ?? '-' }}</td></tr>
-            <tr><td class="label">6. Pekerjaan</td><td class="separator">:</td><td class="value">{{ $d['job'] ?? '-' }}</td></tr>
-            <tr><td class="label">7. No HP (Whatsapp)</td><td class="separator">:</td><td class="value">{{ $d['phone'] ?? '-' }}</td></tr>
-            <tr><td colspan="3" class="label" style="font-weight:600">8. No Darurat:</td></tr>
+            <tr>
+                <td class="label"><strong>1. Nama sesuai Paspor</strong></td>
+                <td class="separator">:</td>
+                <td class="value">{{ $d['name'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="label" style="font-weight:600"><strong>2. Data Paspor</strong></td>
+            </tr>
+            <tr>
+                <td style="padding-left:24px">No Paspor</td>
+                <td class="separator">:</td>
+                <td>{{ $d['passport_no'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td style="padding-left:24px">Tanggal dikeluarkan</td>
+                <td class="separator">:</td>
+                <td>{{ $formatDateID($d['passport_issued_date'] ?? null) }}</td>
+            </tr>
+            <tr>
+                <td style="padding-left:24px">Tempat dikeluarkan</td>
+                <td class="separator">:</td>
+                <td>{{ $d['passport_issued_place'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td style="padding-left:24px">Masa berlaku</td>
+                <td class="separator">:</td>
+                <td>{{ $formatDateID($d['passport_start_date'] ?? null) }} s/d
+                    {{ $formatDateID($d['passport_expiry_date'] ?? null) }}</td>
+            </tr>
+            <tr>
+                <td class="label"><strong>3. Tempat & Tanggal Lahir</strong> </td>
+                <td class="separator">:</td>
+                <td class="value">{{ $d['birth_place'] ?? '-' }}, {{ $formatDateID($d['birth_date'] ?? null) }}</td>
+            </tr>
+            <tr>
+                <td class="label"><strong>4. Jenis Kelamin</strong></td>
+                <td class="separator">:</td>
+                <td class="value">{{ $d['gender'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td class="label"><strong>5. Alamat Domisili</strong></td>
+                <td class="separator">:</td>
+                <td class="value">{{ $d['address'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td class="label"><strong>6. Pekerjaan</strong> </td>
+                <td class="separator">:</td>
+                <td class="value">{{ $d['job'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td class="label"><strong>7. No HP (Whatsapp)</strong></td>
+                <td class="separator">:</td>
+                <td class="value">{{ $d['phone'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="label" style="font-weight:600"><strong>8. No Darurat</strong> </td>
+            </tr>
         </table>
         <table class="info-table">
-            @if(!empty($emergencies))
-                @foreach($emergencies as $idx => $e)
-                <tr><td colspan="3" class="nested-row">{{ $idx + 1 }}. {{ $e }}</td></tr>
+            @if (!empty($emergencies))
+                @foreach ($emergencies as $idx => $e)
+                    <tr>
+                        <td class="label" style="padding-left:24px">Kontak Darurat {{ $idx + 1 }}</td>
+                        <td class="separator">:</td>
+                        <td class="value">
+                            @if (is_array($e))
+                                {{ $e['name'] ?? '-' }} ({{ $e['phone'] ?? '-' }}) / {{ $e['relation'] ?? '-' }}
+                            @else
+                                {{ $e }}
+                            @endif
+                        </td>
+                    </tr>
                 @endforeach
             @else
-                <tr><td colspan="3" class="nested-row">-</td></tr>
+                <tr>
+                    <td colspan="3" class="nested-row">-</td>
+                </tr>
             @endif
         </table>
         <table class="info-table">
-            <tr><td class="label">9. Nama Mahram/Pendamping</td><td class="separator">:</td><td class="value">{{ $d['mahram_name'] ?? '-' }}</td></tr>
-            <tr><td class="label">10. Hubungan Mahram</td><td class="separator">:</td><td class="value">{{ $d['mahram_relation'] ?? '-' }}</td></tr>
-            <tr><td class="label">11. Pengalaman Umrah</td><td class="separator">:</td><td class="value">{{ $d['umrah_experience'] ?? '-' }}</td></tr>
+            <tr>
+                <td class="label"><strong>9. Nama Mahram/Pendamping</strong></td>
+                <td class="separator">:</td>
+                <td class="value">{{ $d['mahram_name'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td class="label"><strong>10. Hubungan Mahram</strong></td>
+                <td class="separator">:</td>
+                <td class="value">{{ $d['mahram_relation'] ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td class="label"><strong>11. Pengalaman Umrah</strong></td>
+                <td class="separator">:</td>
+                <td class="value">{{ $d['umrah_experience'] ?? '-' }}</td>
+            </tr>
         </table>
 
         <div class="section-title">C. DOKUMEN YANG PERLU DIPERSIAPKAN</div>
@@ -127,4 +417,6 @@
             <li>Vaksin Polio & Meningitis</li>
         </ol>
     </div>
-</div>
+</body>
+
+</html>

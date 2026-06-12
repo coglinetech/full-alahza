@@ -125,6 +125,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin', 'admin.n
         Route::get('/', [RegistrantAdminController::class, 'index'])->name('index');
         Route::get('/create', [RegistrantAdminController::class, 'create'])->name('create');
         Route::post('/', [RegistrantAdminController::class, 'store'])->name('store');
+        Route::get('/{registrant}/edit', [RegistrantAdminController::class, 'edit'])->name('edit');
+        Route::put('/{registrant}', [RegistrantAdminController::class, 'update'])->name('update');
         Route::post('/preview', [RegistrantAdminController::class, 'preview'])->name('preview');
         Route::get('/{registrant}', [RegistrantAdminController::class, 'show'])->name('show');
     });
