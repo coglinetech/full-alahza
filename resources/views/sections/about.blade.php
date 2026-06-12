@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="about-visual reveal-right">
-                <div class="about-img-main">
+                <div class="about-img-main" style="position:relative;">
                     @if ($aboutImage)
                         <img src="{{ media_url($aboutImage) }}" alt="About Al-Ahza"
                             style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
@@ -29,11 +29,16 @@
                             <svg>...</svg>
                         </div>
                     @endif
+                    <div class="about-main-logo"
+                        style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);">
+                        <img src="{{ asset('images/logo_new.png') }}" alt="Logo Al-Ahza"
+                            style="width:700px;height:auto;display:block;">
+                    </div>
                 </div>
-                <div class="about-img-overlay">
+                {{-- <div class="about-img-overlay">
                     <div class="num">★ 4.9</div>
                     <div class="label">Rating Jamaah</div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

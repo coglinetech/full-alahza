@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\TestimonialAdminController;
 use App\Http\Controllers\Admin\GalleryAdminController;
 use App\Http\Controllers\Admin\AboutAdminController;
 use App\Http\Controllers\Admin\RegistrantAdminController;
+use App\Http\Controllers\Admin\ReceiptAdminController;
 
 Route::get('/media/{path}', function (string $path) {
     if (str_contains($path, '..')) {
@@ -127,8 +128,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin', 'admin.n
         Route::post('/', [RegistrantAdminController::class, 'store'])->name('store');
         Route::get('/{registrant}/edit', [RegistrantAdminController::class, 'edit'])->name('edit');
         Route::put('/{registrant}', [RegistrantAdminController::class, 'update'])->name('update');
+        Route::delete('/{registrant}', [RegistrantAdminController::class, 'destroy'])->name('destroy');
         Route::post('/preview', [RegistrantAdminController::class, 'preview'])->name('preview');
         Route::get('/{registrant}', [RegistrantAdminController::class, 'show'])->name('show');
+    });
+
+    Route::prefix('receipts')->name('receipts.')->group(function () {
+        Route::get('/', [ReceiptAdminController::class, 'index'])->name('index');
+        Route::get('/create', [ReceiptAdminController::class, 'create'])->name('create');
+        Route::post('/', [ReceiptAdminController::class, 'store'])->name('store');
+        Route::get('/{receipt}/edit', [ReceiptAdminController::class, 'edit'])->name('edit');
+        Route::put('/{receipt}', [ReceiptAdminController::class, 'update'])->name('update');
+        Route::delete('/{receipt}', [ReceiptAdminController::class, 'destroy'])->name('destroy');
+        Route::post('/preview', [ReceiptAdminController::class, 'preview'])->name('preview');
+        Route::get('/{receipt}', [ReceiptAdminController::class, 'show'])->name('show');
     });
 
     // ── About / Site Settings ──────────────────────────────────
