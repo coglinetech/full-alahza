@@ -61,6 +61,17 @@
             return $dateStr;
         }
     };
+
+    $formatYear = function ($dateStr) {
+        if (empty($dateStr)) {
+            return '-';
+        }
+        try {
+            return \Carbon\Carbon::parse($dateStr)->year;
+        } catch (\Exception $e) {
+            return '-';
+        }
+    };
 @endphp
 
 <title>Jamaah_AlAhza_{{ $d['name'] ?? 'Jamaah' }}</title>
@@ -338,8 +349,8 @@
             <tr>
                 <td style="padding-left:24px">Masa berlaku</td>
                 <td class="separator">:</td>
-                <td>{{ $formatDateID($d['passport_start_date'] ?? null) }} s/d
-                    {{ $formatDateID($d['passport_expiry_date'] ?? null) }}</td>
+                <td>Tahun {{ $formatYear($d['passport_start_date'] ?? null) }} s/d tahun
+                    {{ $formatYear($d['passport_expiry_date'] ?? null) }}</td>
             </tr>
             <tr>
                 <td class="label"><strong>3. Tempat & Tanggal Lahir</strong> </td>

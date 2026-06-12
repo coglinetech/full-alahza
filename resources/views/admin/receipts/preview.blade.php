@@ -37,6 +37,33 @@
         }
     };
 
+    $formatDateWithDay = function ($dateStr) {
+        if (empty($dateStr)) {
+            return '-';
+        }
+        try {
+            $date = \Carbon\Carbon::parse($dateStr);
+            $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            $months = [
+                'Januari',
+                'Februari',
+                'Maret',
+                'April',
+                'Mei',
+                'Juni',
+                'Juli',
+                'Agustus',
+                'September',
+                'Oktober',
+                'November',
+                'Desember',
+            ];
+            return $days[$date->dayOfWeek] . ', ' . $date->day . ' ' . $months[$date->month - 1] . ' ' . $date->year;
+        } catch (\Exception $e) {
+            return $dateStr;
+        }
+    };
+
     $numberToWords = function ($number) use (&$numberToWords) {
         $number = (int) $number;
         $words = [
@@ -295,7 +322,7 @@
                     <img src="{{ $logo }}" alt="Logo">
                 </div>
                 <div class="company-info">
-                    <div class="company-name">PT. GUSTI GLOBAL GROUP</div>
+                    <div class="company-name">PT. GUSTI GLOBAL JOURNEY</div>
                     <div>ASZ Building, Gusti Business District, Dusun Simpar RT. 064 RW. 028,</div>
                     <div>Desa Panjalu,
                         Kecamatan
@@ -341,9 +368,9 @@
 
             <div class="signature-row">
                 <div class="signature-block">
-                    <div>{{ $formatDateID($d['receipt_date'] ?? null) }}</div>
+                    <div>{{ $formatDateWithDay($d['receipt_date'] ?? null) }}</div>
                     <div style="margin-top:12px;">Bagian Keuangan,</div>
-                    <div style="margin-top:48px;">PT. GUSTI GLOBAL GROUP</div>
+                    <div style="margin-top:48px;">PT. GUSTI GLOBAL JOURNEY</div>
                 </div>
             </div>
         </div>
