@@ -1,17 +1,17 @@
 @extends('layouts.admin')
 
-@section('title', 'Pendaftaran Jamaah - Admin')
-@section('page-title', 'Pendaftaran Jamaah')
+@section('title', 'Cetak Kuitansi - Admin')
+@section('page-title', 'Cetak Kuitansi')
 
 @section('content')
 
     <div class="page-header">
         <div>
-            <h1>Pendaftaran Jamaah</h1>
-            <p>Kelola data pendaftar umrah.</p>
+            <h1>Cetak Kuitansi</h1>
+            <p>Kelola dan cetak kuitansi pembayaran.</p>
         </div>
         <div class="page-header-actions">
-            <a href="{{ route('admin.registrants.create') }}" class="btn btn-primary">Tambah Jamaah</a>
+            <a href="{{ route('admin.receipts.create') }}" class="btn btn-primary">Tambah Kuitansi</a>
         </div>
     </div>
 
@@ -21,35 +21,39 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Nama</th>
-                            <th>Paket</th>
-                            <th>HP</th>
-                            <th>Dibuat</th>
+                            <th>Nomor</th>
+                            <th>Tanda Terima Dari</th>
+                            <th>Uang Sejumlah</th>
+                            <th>Tanggal</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($items as $it)
+                        @forelse ($items as $item)
                             <tr>
-                                <td>{{ $it->name }}</td>
-                                <td class="td-muted">{{ $it->package_option }}</td>
-                                <td>{{ $it->phone }}</td>
-                                <td class="td-muted">{{ $it->created_at->format('Y-m-d') }}</td>
+                                <td>{{ $item->display_receipt_number ?? '-' }}</td>
+                                <td>{{ $item->payer_name }}</td>
+                                <td>{{ $item->amount_text }}</td>
+                                <td class="td-muted">{{ $item->receipt_date->format('Y-m-d') }}</td>
                                 <td class="td-actions">
-                                    <a href="{{ route('admin.registrants.edit', $it) }}"
+                                    <a href="{{ route('admin.receipts.edit', $item) }}"
                                         class="btn btn-primary btn-sm">Edit</a>
                                     <button type="button" class="btn btn-secondary btn-sm"
-                                        onclick="printPDFRegistrant({{ $it->id }})">Cetak PDF</button>
-                                    <form action="{{ route('admin.registrants.destroy', $it) }}" method="POST"
+                                        onclick="printPDFReceipt({{ $item->id }})">Cetak PDF</button>
+                                    <form action="{{ route('admin.receipts.destroy', $item) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Yakin ingin menghapus data pendaftar ini?');">Hapus</button>
+                                            onclick="return confirm('Yakin ingin menghapus kuitansi ini?');">Hapus</button>
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="5" class="td-muted">Belum ada kuitansi.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -59,39 +63,24 @@
     </div>
 
     <script>
-        function printPDFRegistrant(registrantId) {
-            // Create iframe untuk print
+        function printPDFReceipt(receiptId) {
             const iframe = document.createElement('iframe');
             iframe.style.display = 'none';
             document.body.appendChild(iframe);
 
-            // Save original title
             const originalTitle = document.title;
+            const previewUrl = `/admin/receipts/${receiptId}`;
 
-            // Fetch preview untuk registrant ini
-            const previewUrl = `/admin/registrants/${registrantId}`;
             fetch(previewUrl)
                 .then(response => response.text())
                 .then(html => {
-                    // Write HTML ke iframe
                     iframe.contentDocument.write(html);
                     iframe.contentDocument.close();
+                    document.title = 'Kuitansi_' + receiptId;
+                    iframe.contentDocument.title = 'Kuitansi_' + receiptId;
 
-                    // Extract filename dari title tag di preview
-                    const titleMatch = html.match(/<title>(.+?)<\/title>/);
-                    let safeFileName = 'Jamaah_AlAhza_Jamaah';
-                    if (titleMatch && titleMatch[1]) {
-                        safeFileName = titleMatch[1];
-                    }
-
-                    // Set document title untuk PDF filename
-                    document.title = safeFileName;
-                    iframe.contentDocument.title = safeFileName;
-
-                    // Wait untuk CSS fully rendered sebelum print
                     setTimeout(() => {
                         iframe.contentWindow.print();
-                        // Remove iframe dan restore title setelah print dialog ditutup
                         iframe.contentWindow.onafterprint = function() {
                             try {
                                 document.body.removeChild(iframe);
@@ -102,7 +91,6 @@
                 })
                 .catch(error => {
                     console.error('Error loading preview:', error);
-                    document.title = originalTitle;
                     try {
                         document.body.removeChild(iframe);
                     } catch (e) {}

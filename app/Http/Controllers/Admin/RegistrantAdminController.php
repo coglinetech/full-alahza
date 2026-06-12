@@ -150,4 +150,15 @@ class RegistrantAdminController extends Controller
         }
         return view('admin.registrants.preview', ['data' => $data]);
     }
+
+    public function destroy(Registrant $registrant)
+    {
+        if ($registrant->photo_path) {
+            Storage::disk('public')->delete($registrant->photo_path);
+        }
+
+        $registrant->delete();
+
+        return redirect()->route('admin.registrants.index')->with('success', 'Data pendaftar berhasil dihapus.');
+    }
 }

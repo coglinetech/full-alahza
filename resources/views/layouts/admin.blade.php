@@ -1196,6 +1196,17 @@
                             Pendaftaran Jamaah
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.receipts.index') }}"
+                            class="{{ request()->routeIs('admin.receipts.*') ? 'active' : '' }}">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 5h16v14H4z" />
+                                <path d="M8 9h8" />
+                                <path d="M8 13h8" />
+                            </svg>
+                            Cetak Kuitansi
+                        </a>
+                    </li>
 
                 </ul>
             </div>
