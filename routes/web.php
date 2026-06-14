@@ -153,4 +153,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin', 'admin.n
     Route::get('/session-check', function () {
         return response()->json(['ok' => true]);
     })->name('session.check');
+
+    // ── Ganti Password ─────────────────────────────────────────
+    Route::get('/password', function () {
+        return view('admin.password');
+    })->name('password');
+
+    Route::put('/password', function (\Illuminate\Http\Request $request) {
+        $request->validate([
+            'new_password' => ['required', 'min:8', 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'password' => $request->new_password,
+        ]);
+
+        return redirect()->route('admin.password')
+            ->with('success', 'Password berhasil diubah.');
+    })->name('password.update');
 });

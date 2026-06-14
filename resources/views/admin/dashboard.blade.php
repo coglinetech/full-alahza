@@ -308,32 +308,4 @@
 
 </div>
 
-{{-- ROW 2: Akses Cepat --}}
-<div class="dash-card">
-    <div class="dash-card-head">
-        <div class="dash-card-title">
-            <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            Akses Cepat
-        </div>
-    </div>
-    <div class="quick-links">
-        <a href="{{ route('admin.packages.create') }}" class="quick-link">
-            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
-            Tambah Paket Baru
-        </a>
-        <a href="{{ route('admin.testimonials.create') }}" class="quick-link">
-            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-            Tambah Testimoni
-        </a>
-        <a href="{{ route('admin.gallery.create') }}" class="quick-link">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            Upload Foto Galeri
-        </a>
-        <a href="{{ route('admin.about.index') }}" class="quick-link">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-            Edit Foto About
-        </a>
-    </div>
-</div>
-
 @endsection
