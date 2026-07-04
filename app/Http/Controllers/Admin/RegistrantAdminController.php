@@ -7,6 +7,7 @@ use App\Models\Registrant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class RegistrantAdminController extends Controller
@@ -14,6 +15,7 @@ class RegistrantAdminController extends Controller
     public function index()
     {
         $items = Registrant::latest()->paginate(20);
+        $items = Registrant::orderBy('created_at', 'desc')->paginate(50);
         return view('admin.registrants.index', ['items' => $items]);
     }
 
@@ -30,7 +32,10 @@ class RegistrantAdminController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+<<<<<<< HEAD
             'email' => 'nullable|email',
+=======
+>>>>>>> projek_kedua/master
             'package_option' => 'nullable|string',
             'name' => 'required|string|max:255',
             'passport_no' => 'nullable|string|max:255',
@@ -48,7 +53,11 @@ class RegistrantAdminController extends Controller
             'mahram_name' => 'nullable|string|max:255',
             'mahram_relation' => 'nullable|string|max:100',
             'umrah_experience' => 'nullable|string|max:50',
+<<<<<<< HEAD
             'photo' => 'nullable|image|max:2048',
+=======
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
+>>>>>>> projek_kedua/master
         ]);
 
         if ($request->hasFile('photo')) {
@@ -75,6 +84,7 @@ class RegistrantAdminController extends Controller
 
     public function update(Request $request, Registrant $registrant)
     {
+<<<<<<< HEAD
         $emailRule = 'nullable|email';
         if ($registrant->user_id) {
             $emailRule = 'nullable|email|unique:users,email,' . $registrant->user_id;
@@ -82,6 +92,9 @@ class RegistrantAdminController extends Controller
 
         $data = $request->validate([
             'email' => $emailRule,
+=======
+        $data = $request->validate([
+>>>>>>> projek_kedua/master
             'package_option' => 'nullable|string',
             'name' => 'required|string|max:255',
             'passport_no' => 'nullable|string|max:255',
@@ -99,7 +112,11 @@ class RegistrantAdminController extends Controller
             'mahram_name' => 'nullable|string|max:255',
             'mahram_relation' => 'nullable|string|max:100',
             'umrah_experience' => 'nullable|string|max:50',
+<<<<<<< HEAD
             'photo' => 'nullable|image|max:2048',
+=======
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
+>>>>>>> projek_kedua/master
         ]);
 
         if ($request->hasFile('photo')) {
@@ -125,6 +142,7 @@ class RegistrantAdminController extends Controller
 
         $registrant->update($data);
 
+<<<<<<< HEAD
         if ($registrant->user_id && isset($data['email'])) {
             $user = User::find($registrant->user_id);
             if ($user && $user->email !== $data['email']) {
@@ -132,6 +150,8 @@ class RegistrantAdminController extends Controller
             }
         }
 
+=======
+>>>>>>> projek_kedua/master
         return redirect()->route('admin.registrants.index')->with('success', 'Data pendaftar berhasil diupdate.');
     }
 
@@ -167,6 +187,7 @@ class RegistrantAdminController extends Controller
         return view('admin.registrants.preview', ['data' => $data]);
     }
 
+<<<<<<< HEAD
     public function account(Registrant $registrant)
     {
         return view('admin.registrants.account', compact('registrant'));
@@ -229,6 +250,8 @@ class RegistrantAdminController extends Controller
         return back()->with('success', 'Akun mobile berhasil dihapus.');
     }
 
+=======
+>>>>>>> projek_kedua/master
     public function destroy(Registrant $registrant)
     {
         if ($registrant->photo_path) {

@@ -4,6 +4,13 @@
 @section('page-title', 'Edit Pendaftar')
 
 @section('content')
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+@endpush
 
     <div class="page-header">
         <div>
@@ -49,12 +56,16 @@
 
                     <label class="form-group">
                         <span>Nama sesuai Paspor</span>
+<<<<<<< HEAD
                         <input type="text" name="name" value="{{ old('name', $registrant->name) }}" oninput="updatePreview()">
                     </label>
 
                     <label class="form-group">
                         <span>Email (Opsional untuk login aplikasi)</span>
                         <input type="email" name="email" value="{{ old('email', $registrant->email) }}" oninput="updatePreview()">
+=======
+                        <input type="text" name="name" value="{{ $registrant->name }}" oninput="updatePreview()">
+>>>>>>> projek_kedua/master
                     </label>
 
                     <label class="form-group">
@@ -65,8 +76,15 @@
 
                     <label class="form-group">
                         <span>Tanggal Dikeluarkan Paspor</span>
+<<<<<<< HEAD
                         <input type="date" name="passport_issued_date"
                             value="{{ $registrant->passport_issued_date?->format('Y-m-d') }}" onchange="updatePreview()">
+=======
+                        <input type="text" name="passport_issued_date" placeholder="DD/MM/YYYY"
+                            class="flatpickr-date"
+                            value="{{ $registrant->passport_issued_date?->format('d/m/Y') }}"
+                            onchange="updatePreview();">
+>>>>>>> projek_kedua/master
                     </label>
 
                     <label class="form-group">
@@ -77,14 +95,28 @@
 
                     <label class="form-group">
                         <span>Tanggal Mulai Berlaku Paspor</span>
+<<<<<<< HEAD
                         <input type="date" name="passport_start_date"
                             value="{{ $registrant->passport_start_date?->format('Y-m-d') }}" onchange="updatePreview()">
+=======
+                        <input type="text" name="passport_start_date" placeholder="DD/MM/YYYY"
+                            class="flatpickr-date"
+                            value="{{ $registrant->passport_start_date?->format('d/m/Y') }}"
+                            onchange="updatePreview();">
+>>>>>>> projek_kedua/master
                     </label>
 
                     <label class="form-group">
                         <span>Tanggal Selesai Berlaku Paspor</span>
+<<<<<<< HEAD
                         <input type="date" name="passport_expiry_date"
                             value="{{ $registrant->passport_expiry_date?->format('Y-m-d') }}" onchange="updatePreview()">
+=======
+                        <input type="text" name="passport_expiry_date" placeholder="DD/MM/YYYY"
+                            class="flatpickr-date"
+                            value="{{ $registrant->passport_expiry_date?->format('d/m/Y') }}"
+                            onchange="updatePreview();">
+>>>>>>> projek_kedua/master
                     </label>
 
                     <label class="form-group">
@@ -94,8 +126,15 @@
                     </label>
                     <label class="form-group">
                         <span>Tanggal Lahir</span>
+<<<<<<< HEAD
                         <input type="date" name="birth_date" value="{{ $registrant->birth_date?->format('Y-m-d') }}"
                             onchange="updatePreview()">
+=======
+                        <input type="text" name="birth_date" placeholder="DD/MM/YYYY"
+                            class="flatpickr-date"
+                            value="{{ $registrant->birth_date?->format('d/m/Y') }}"
+                            onchange="updatePreview();">
+>>>>>>> projek_kedua/master
                     </label>
 
                     <label class="form-group">
@@ -236,6 +275,7 @@
 
                     <label class="form-group">
                         <span>Pengalaman Umrah</span>
+<<<<<<< HEAD
                         <select name="umrah_experience" onchange="updatePreview()">
                             <option value="">--</option>
                             <option {{ $registrant->umrah_experience === 'Ke-1' ? 'selected' : '' }}>Ke-1</option>
@@ -243,6 +283,12 @@
                             <option {{ $registrant->umrah_experience === 'Ke-3' ? 'selected' : '' }}>Ke-3</option>
                             <option {{ $registrant->umrah_experience === 'Ke-4' ? 'selected' : '' }}>Ke-4</option>
                         </select>
+=======
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <span>Ke-</span>
+                            <input type="number" name="umrah_experience" value="{{ is_numeric($registrant->umrah_experience) ? $registrant->umrah_experience : (str_starts_with($registrant->umrah_experience ?? '', 'Ke-') ? substr($registrant->umrah_experience, 3) : $registrant->umrah_experience) }}" min="1" oninput="updatePreview()" style="width:100px;">
+                        </div>
+>>>>>>> projek_kedua/master
                     </label>
 
                     <label class="form-group">
@@ -268,7 +314,10 @@
                 @csrf
                 <input type="hidden" name="package_option">
                 <input type="hidden" name="name">
+<<<<<<< HEAD
                 <input type="hidden" name="email">
+=======
+>>>>>>> projek_kedua/master
                 <input type="hidden" name="passport_no">
                 <input type="hidden" name="passport_issued_date">
                 <input type="hidden" name="passport_issued_place">
@@ -304,6 +353,24 @@
                 return el ? el.value : '';
             }
 
+<<<<<<< HEAD
+=======
+            const DATE_FIELDS = ['passport_issued_date', 'passport_start_date', 'passport_expiry_date', 'birth_date'];
+
+            function dateToBackend(d) {
+                if (!d) return '';
+                const p = d.split('/');
+                return p.length === 3 ? p[2] + '-' + p[1] + '-' + p[0] : d;
+            }
+
+            function convertFormDates() {
+                DATE_FIELDS.forEach(function(name) {
+                    const el = document.querySelector('[name="' + name + '"]');
+                    if (el) el.value = dateToBackend(el.value);
+                });
+            }
+
+>>>>>>> projek_kedua/master
             function getEmergencyContacts() {
                 const items = document.querySelectorAll('.emergency-contact-item');
                 const contacts = [];
@@ -363,6 +430,7 @@
                 const data = {
                     package_option: getVal('package_option'),
                     name: getVal('name'),
+<<<<<<< HEAD
                     email: getVal('email'),
                     passport_no: getVal('passport_no'),
                     passport_issued_date: getVal('passport_issued_date'),
@@ -371,6 +439,15 @@
                     passport_expiry_date: getVal('passport_expiry_date'),
                     birth_place: getVal('birth_place'),
                     birth_date: getVal('birth_date'),
+=======
+                    passport_no: getVal('passport_no'),
+                    passport_issued_date: dateToBackend(getVal('passport_issued_date')),
+                    passport_issued_place: getVal('passport_issued_place'),
+                    passport_start_date: dateToBackend(getVal('passport_start_date')),
+                    passport_expiry_date: dateToBackend(getVal('passport_expiry_date')),
+                    birth_place: getVal('birth_place'),
+                    birth_date: dateToBackend(getVal('birth_date')),
+>>>>>>> projek_kedua/master
                     gender: getVal('gender'),
                     address: getVal('address'),
                     job: getVal('job'),
@@ -397,14 +474,24 @@
 
             function submitPreview() {
                 const form = document.getElementById('previewPostForm');
+<<<<<<< HEAD
                 const names = ['package_option', 'name', 'email', 'passport_no', 'passport_issued_date', 'passport_issued_place',
+=======
+                const names = ['package_option', 'name', 'passport_no', 'passport_issued_date', 'passport_issued_place',
+>>>>>>> projek_kedua/master
                     'passport_start_date', 'passport_expiry_date', 'birth_place', 'birth_date', 'gender', 'address', 'job',
                     'phone', 'mahram_name',
                     'mahram_relation', 'umrah_experience'
                 ];
                 names.forEach(n => {
+<<<<<<< HEAD
                     const input = form.querySelector('[name="' + n + '"]');
                     input.value = document.querySelector('[name="' + n + '"]').value || '';
+=======
+                    let v = document.querySelector('[name="' + n + '"]').value || '';
+                    if (DATE_FIELDS.includes(n)) v = dateToBackend(v);
+                    form.querySelector('[name="' + n + '"]').value = v;
+>>>>>>> projek_kedua/master
                 });
                 const emergInput = form.querySelector('[name="emergency_contacts"]');
                 emergInput.value = JSON.stringify(getEmergencyContacts());
@@ -430,6 +517,7 @@
                 const data = {
                     package_option: getVal('package_option'),
                     name: getVal('name'),
+<<<<<<< HEAD
                     email: getVal('email'),
                     passport_no: getVal('passport_no'),
                     passport_issued_date: getVal('passport_issued_date'),
@@ -438,6 +526,15 @@
                     passport_expiry_date: getVal('passport_expiry_date'),
                     birth_place: getVal('birth_place'),
                     birth_date: getVal('birth_date'),
+=======
+                    passport_no: getVal('passport_no'),
+                    passport_issued_date: dateToBackend(getVal('passport_issued_date')),
+                    passport_issued_place: getVal('passport_issued_place'),
+                    passport_start_date: dateToBackend(getVal('passport_start_date')),
+                    passport_expiry_date: dateToBackend(getVal('passport_expiry_date')),
+                    birth_place: getVal('birth_place'),
+                    birth_date: dateToBackend(getVal('birth_date')),
+>>>>>>> projek_kedua/master
                     gender: getVal('gender'),
                     address: getVal('address'),
                     job: getVal('job'),
@@ -463,10 +560,18 @@
                 }).catch(e => console.error('Preview error:', e));
             }
 
+<<<<<<< HEAD
             // Add form submit handler to populate emergency_contacts
             document.getElementById('regForm').addEventListener('submit', function(e) {
                 const emergencyContactsData = getEmergencyContacts();
                 document.getElementById('emergency_contacts_input').value = JSON.stringify(emergencyContactsData);
+=======
+            // Add form submit handler to populate emergency_contacts and convert dates
+            document.getElementById('regForm').addEventListener('submit', function(e) {
+                const emergencyContactsData = getEmergencyContacts();
+                document.getElementById('emergency_contacts_input').value = JSON.stringify(emergencyContactsData);
+                convertFormDates();
+>>>>>>> projek_kedua/master
             });
 
             function printPDF() {
@@ -513,6 +618,19 @@
                     });
             }
 
+<<<<<<< HEAD
+=======
+            // Init flatpickr
+            document.querySelectorAll('.flatpickr-date').forEach(function(el) {
+                flatpickr(el, {
+                    locale: 'id',
+                    dateFormat: 'd/m/Y',
+                    allowInput: true,
+                    onChange: function() { el.dispatchEvent(new Event('change')); }
+                });
+            });
+
+>>>>>>> projek_kedua/master
             // init
             updatePreview();
         </script>

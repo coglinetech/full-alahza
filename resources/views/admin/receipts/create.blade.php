@@ -4,6 +4,13 @@
 @section('page-title', 'Tambah Kuitansi')
 
 @section('content')
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+@endpush
 
     <div class="page-header">
         <div>
@@ -63,8 +70,13 @@
                     </label>
                     <label class="form-group">
                         <span>Tanggal Kuitansi</span>
+<<<<<<< HEAD
                         <input type="date" name="receipt_date" value="{{ old('receipt_date') }}" required
                             onchange="updatePreview()">
+=======
+                        <input type="text" name="receipt_date" value="{{ old('receipt_date') }}" required
+                            placeholder="DD/MM/YYYY" class="flatpickr-date" onchange="updatePreview();">
+>>>>>>> projek_kedua/master
                     </label>
                     <div>
                         <button type="submit" class="btn btn-primary">Simpan Kuitansi</button>
@@ -76,7 +88,11 @@
         <div>
             <div class="card">
                 <div class="card-body" id="previewArea" style="min-height:420px;">
+<<<<<<< HEAD
                     @include('admin.receipts.preview', ['data' => []])
+=======
+                    @include('admin.receipts.preview-content', ['data' => []])
+>>>>>>> projek_kedua/master
                 </div>
             </div>
         </div>
@@ -90,6 +106,24 @@
                 return el ? el.value : '';
             }
 
+<<<<<<< HEAD
+=======
+            const RECEIPT_DATE_FIELDS = ['receipt_date'];
+
+            function dateToBackend(d) {
+                if (!d) return '';
+                const p = d.split('/');
+                return p.length === 3 ? p[2] + '-' + p[1] + '-' + p[0] : d;
+            }
+
+            function convertFormDates() {
+                RECEIPT_DATE_FIELDS.forEach(function(name) {
+                    const el = document.querySelector('[name="' + name + '"]');
+                    if (el) el.value = dateToBackend(el.value);
+                });
+            }
+
+>>>>>>> projek_kedua/master
             function formatRupiah(value) {
                 const number = Number(String(value).replace(/[^0-9]/g, '')) || 0;
                 return new Intl.NumberFormat('id-ID', {
@@ -154,10 +188,17 @@
                     amount_text: getVal('amount_text'),
                     description: getVal('description'),
                     package_price: getVal('package_price'),
+<<<<<<< HEAD
                     receipt_date: getVal('receipt_date'),
                 };
 
                 fetch('{{ route('admin.receipts.preview') }}', {
+=======
+                    receipt_date: dateToBackend(getVal('receipt_date')),
+                };
+
+                fetch('{{ route('admin.receipts.preview-content') }}', {
+>>>>>>> projek_kedua/master
                         method: 'POST',
                         credentials: 'same-origin',
                         headers: {
@@ -180,7 +221,11 @@
                     amount_text: getVal('amount_text'),
                     description: getVal('description'),
                     package_price: getVal('package_price'),
+<<<<<<< HEAD
                     receipt_date: getVal('receipt_date'),
+=======
+                    receipt_date: dateToBackend(getVal('receipt_date')),
+>>>>>>> projek_kedua/master
                 };
 
                 const iframe = document.createElement('iframe');
@@ -233,6 +278,12 @@
 
             document.getElementById('receiptForm').addEventListener('input', enablePrintButton);
             document.getElementById('receiptForm').addEventListener('change', enablePrintButton);
+<<<<<<< HEAD
+=======
+            document.getElementById('receiptForm').addEventListener('submit', function(e) {
+                convertFormDates();
+            });
+>>>>>>> projek_kedua/master
             const amountField = document.getElementById('amount_text');
             if (amountField) {
                 amountField.value = formatRupiah(amountField.value);
@@ -242,6 +293,19 @@
             if (packageField) {
                 packageField.value = formatRupiah(packageField.value);
             }
+<<<<<<< HEAD
+=======
+            // Init flatpickr
+            document.querySelectorAll('.flatpickr-date').forEach(function(el) {
+                flatpickr(el, {
+                    locale: 'id',
+                    dateFormat: 'd/m/Y',
+                    allowInput: true,
+                    onChange: function() { el.dispatchEvent(new Event('change')); }
+                });
+            });
+
+>>>>>>> projek_kedua/master
             updatePreview();
         </script>
     @endpush

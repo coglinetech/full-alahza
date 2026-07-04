@@ -39,6 +39,7 @@ class ReceiptAdminController extends Controller
 
         $data['receipt_number'] = $this->normalizeReceiptNumber($data['receipt_number'] ?? '');
         $data['admin_name'] = auth()->user()->name;
+        $data['admin_name'] = '';
 
         Receipt::create($data);
 
@@ -57,7 +58,11 @@ class ReceiptAdminController extends Controller
         ]);
 
         $data['receipt_number'] = $this->normalizeReceiptNumber($data['receipt_number'] ?? '');
+<<<<<<< HEAD
         $data['admin_name'] = auth()->user()->name;
+=======
+        $data['admin_name'] = '';
+>>>>>>> projek_kedua/master
 
         $receipt->update($data);
 
@@ -70,6 +75,15 @@ class ReceiptAdminController extends Controller
         return view('admin.receipts.preview', ['data' => $data]);
     }
 
+<<<<<<< HEAD
+=======
+    public function previewContent(Request $request)
+    {
+        $data = $request->all();
+        return view('admin.receipts.preview-content', ['data' => $data]);
+    }
+
+>>>>>>> projek_kedua/master
     public function show(Receipt $receipt)
     {
         return view('admin.receipts.preview', ['data' => $receipt->toArray()]);

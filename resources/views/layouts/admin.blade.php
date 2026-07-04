@@ -350,6 +350,29 @@
         .sb-dropdown-danger:hover {
             color: #fca5a5;
             background: rgba(220,38,38,0.1);
+        .sb-ganti-pw {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 9px;
+            border-radius: var(--r);
+            color: rgba(255, 255, 255, 0.28);
+            font-size: 12px;
+            text-decoration: none;
+            transition: color 0.15s, background 0.15s;
+            width: 100%;
+        }
+        .sb-ganti-pw svg {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.75;
+        }
+        .sb-ganti-pw:hover {
+            color: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.04);
         }
 
         /* overlay mobile */
@@ -1372,6 +1395,27 @@
                     </div>
                 </div>
             </div>
+                <div style="overflow:hidden;">
+                    <div class="sb-uname">{{ auth()->user()->name ?? 'Admin' }}</div>
+                    <div class="sb-urole">Administrator</div>
+                </div>
+            </div>
+            <a href="{{ route('admin.password') }}" class="sb-ganti-pw">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="11" width="18" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+                Ganti Password
+            </a>
+            <form method="POST" action="{{ route('admin.logout') }}">
+                @csrf
+                <button type="submit" class="sb-logout">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
+                    </svg>
+                    Keluar
+                </button>
+            </form>
         </div>
     </aside>
 

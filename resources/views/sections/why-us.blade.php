@@ -13,6 +13,8 @@
                 </div>
                 <div class="why-title">Tim Berpengalaman</div>
                 <p class="why-desc">Didukung oleh tim manajemen dan pembimbing yang berpengalaman melayani tamu Allah. Setiap jamaah adalah amanah yang kami jaga dengan sepenuh hati sampai kembali ke tanah air.</p>
+                <div class="why-title">Pengalaman Lebih dari 10 Tahun</div>
+                <p class="why-desc">Ribuan jamaah sudah kami berangkatkan sejak awal berdiri. Bukan sekadar angka — setiap jamaah adalah amanah yang kami jaga sampai kembali ke tanah air.</p>
             </div>
             <div class="why-card reveal" style="transition-delay:0.2s">
                 <div class="why-icon">

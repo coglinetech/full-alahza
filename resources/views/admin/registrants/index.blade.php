@@ -15,22 +15,33 @@
         </div>
     </div>
 
+    <div style="margin-bottom:8px;font-size:14px;font-weight:600;">Total Jamaah: {{ $items->total() }}</div>
+
     <div class="card">
         <div class="card-body">
             <div class="table-wrap">
                 <table>
                     <thead>
                         <tr>
+<<<<<<< HEAD
+=======
+                            <th>#</th>
+>>>>>>> projek_kedua/master
                             <th>Nama</th>
                             <th>Paket</th>
                             <th>HP</th>
                             <th>Dibuat</th>
+<<<<<<< HEAD
                             <th>Aksi</th>
+=======
+                            <th></th>
+>>>>>>> projek_kedua/master
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($items as $it)
                             <tr>
+<<<<<<< HEAD
                                 <td>{{ $it->name }}</td>
                                 <td class="td-muted">{{ $it->package_option }}</td>
                                 <td>{{ $it->phone }}</td>
@@ -51,6 +62,25 @@
                                             </form>
                                         </div>
                                     </div>
+=======
+                                <td>{{ $items->total() - ($items->firstItem() - 1) - $loop->iteration + 1 }}</td>
+                                <td>{{ $it->name }}</td>
+                                <td class="td-muted">{{ $it->package_option }}</td>
+                                <td>{{ $it->phone }}</td>
+                                <td class="td-muted">{{ $it->created_at->format('d-m-Y') }}</td>
+                                <td class="td-actions">
+                                    <a href="{{ route('admin.registrants.edit', $it) }}"
+                                        class="btn btn-primary btn-sm">Edit</a>
+                                    <button type="button" class="btn btn-secondary btn-sm"
+                                        onclick="printPDFRegistrant({{ $it->id }})">Cetak PDF</button>
+                                    <form action="{{ route('admin.registrants.destroy', $it) }}" method="POST"
+                                        style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Yakin ingin menghapus data pendaftar ini?');">Hapus</button>
+                                    </form>
+>>>>>>> projek_kedua/master
                                 </td>
                             </tr>
                         @endforeach
@@ -58,11 +88,16 @@
                 </table>
             </div>
 
+<<<<<<< HEAD
             <div style="margin-top:12px">{{ $items->links() }}</div>
+=======
+            <div style="margin-top:12px">{{ $items->links('vendor.pagination.admin') }}</div>
+>>>>>>> projek_kedua/master
         </div>
     </div>
 
     <style>
+<<<<<<< HEAD
         .action-dropdown { display: inline-block; }
         .action-dropdown-menu {
             display: none; position: fixed; flex-direction: column; gap: 2px;
@@ -130,29 +165,91 @@
 
         function printPDFRegistrant(registrantId) {
             // Create iframe untuk print
+=======
+        .print-spinner-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+        .print-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .print-spinner-text {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+        }
+    </style>
+
+    <script>
+        let spinnerEl = null;
+
+        function showPrintSpinner() {
+            const overlay = document.createElement('div');
+            overlay.className = 'print-spinner-overlay';
+            overlay.innerHTML = '<div class="print-spinner"></div><div class="print-spinner-text">Menyiapkan dokumen…</div>';
+            document.body.appendChild(overlay);
+            spinnerEl = overlay;
+        }
+
+        function hidePrintSpinner() {
+            if (spinnerEl) {
+                spinnerEl.remove();
+                spinnerEl = null;
+            }
+        }
+
+        function printPDFRegistrant(registrantId) {
+            showPrintSpinner();
+
+>>>>>>> projek_kedua/master
             const iframe = document.createElement('iframe');
             iframe.style.display = 'none';
             document.body.appendChild(iframe);
 
+<<<<<<< HEAD
             // Save original title
             const originalTitle = document.title;
 
             // Fetch preview untuk registrant ini
+=======
+            const originalTitle = document.title;
+
+>>>>>>> projek_kedua/master
             const previewUrl = `/admin/registrants/${registrantId}`;
             fetch(previewUrl)
                 .then(response => response.text())
                 .then(html => {
+<<<<<<< HEAD
                     // Write HTML ke iframe
                     iframe.contentDocument.write(html);
                     iframe.contentDocument.close();
 
                     // Extract filename dari title tag di preview
+=======
+                    iframe.contentDocument.write(html);
+                    iframe.contentDocument.close();
+
+>>>>>>> projek_kedua/master
                     const titleMatch = html.match(/<title>(.+?)<\/title>/);
                     let safeFileName = 'Jamaah_AlAhza_Jamaah';
                     if (titleMatch && titleMatch[1]) {
                         safeFileName = titleMatch[1];
                     }
 
+<<<<<<< HEAD
                     // Set document title untuk PDF filename
                     document.title = safeFileName;
                     iframe.contentDocument.title = safeFileName;
@@ -161,6 +258,14 @@
                     setTimeout(() => {
                         iframe.contentWindow.print();
                         // Remove iframe dan restore title setelah print dialog ditutup
+=======
+                    document.title = safeFileName;
+                    iframe.contentDocument.title = safeFileName;
+
+                    setTimeout(() => {
+                        hidePrintSpinner();
+                        iframe.contentWindow.print();
+>>>>>>> projek_kedua/master
                         iframe.contentWindow.onafterprint = function() {
                             try {
                                 document.body.removeChild(iframe);
@@ -170,6 +275,10 @@
                     }, 1500);
                 })
                 .catch(error => {
+<<<<<<< HEAD
+=======
+                    hidePrintSpinner();
+>>>>>>> projek_kedua/master
                     console.error('Error loading preview:', error);
                     document.title = originalTitle;
                     try {

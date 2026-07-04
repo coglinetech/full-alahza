@@ -4,6 +4,13 @@
 @section('page-title', 'Tambah Pendaftar')
 
 @section('content')
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+@endpush
 
     <div class="page-header">
         <div>
@@ -49,18 +56,26 @@
                     </label>
 
                     <label class="form-group">
+<<<<<<< HEAD
                         <span>Email (Opsional untuk login aplikasi)</span>
                         <input type="email" name="email" value="{{ old('email') }}" oninput="updatePreview()">
                     </label>
 
                     <label class="form-group">
+=======
+>>>>>>> projek_kedua/master
                         <span>No Paspor</span>
                         <input type="text" name="passport_no" oninput="updatePreview()">
                     </label>
 
                     <label class="form-group">
                         <span>Tanggal Dikeluarkan Paspor</span>
+<<<<<<< HEAD
                         <input type="date" name="passport_issued_date" onchange="updatePreview()">
+=======
+                        <input type="text" name="passport_issued_date" placeholder="DD/MM/YYYY"
+                            class="flatpickr-date" onchange="updatePreview()">
+>>>>>>> projek_kedua/master
                     </label>
 
                     <label class="form-group">
@@ -70,12 +85,22 @@
 
                     <label class="form-group">
                         <span>Tanggal Mulai Berlaku Paspor</span>
+<<<<<<< HEAD
                         <input type="date" name="passport_start_date" onchange="updatePreview()">
+=======
+                        <input type="text" name="passport_start_date" placeholder="DD/MM/YYYY"
+                            class="flatpickr-date" onchange="updatePreview();">
+>>>>>>> projek_kedua/master
                     </label>
 
                     <label class="form-group">
                         <span>Tanggal Selesai Berlaku Paspor</span>
+<<<<<<< HEAD
                         <input type="date" name="passport_expiry_date" onchange="updatePreview()">
+=======
+                        <input type="text" name="passport_expiry_date" placeholder="DD/MM/YYYY"
+                            class="flatpickr-date" onchange="updatePreview();">
+>>>>>>> projek_kedua/master
                     </label>
 
                     <label class="form-group">
@@ -84,7 +109,12 @@
                     </label>
                     <label class="form-group">
                         <span>Tanggal Lahir</span>
+<<<<<<< HEAD
                         <input type="date" name="birth_date" onchange="updatePreview()">
+=======
+                        <input type="text" name="birth_date" placeholder="DD/MM/YYYY"
+                            class="flatpickr-date" onchange="updatePreview();">
+>>>>>>> projek_kedua/master
                     </label>
 
                     <label class="form-group">
@@ -167,6 +197,7 @@
 
                     <label class="form-group">
                         <span>Pengalaman Umrah</span>
+<<<<<<< HEAD
                         <select name="umrah_experience" onchange="updatePreview()">
                             <option value="">--</option>
                             <option>Ke-1</option>
@@ -174,11 +205,22 @@
                             <option>Ke-3</option>
                             <option>Ke-4</option>
                         </select>
+=======
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <span>Ke-</span>
+                            <input type="number" name="umrah_experience" value="{{ old('umrah_experience') }}" min="1" oninput="updatePreview()" style="width:100px;">
+                        </div>
+>>>>>>> projek_kedua/master
                     </label>
 
                     <label class="form-group">
                         <span>Foto Jamaah (opsional)</span>
+<<<<<<< HEAD
                         <input type="file" name="photo" accept="image/*" onchange="loadPhotoPreview(event)">
+=======
+                        <input type="file" name="photo" accept=".png,.jpg,.jpeg,image/png,image/jpeg" onchange="loadPhotoPreview(event)">
+                        <small style="color:#666;display:block;margin-top:4px;">Format: PNG, JPG, JPEG. Maks: 5 MB.</small>
+>>>>>>> projek_kedua/master
                     </label>
 
                     <div>
@@ -193,7 +235,10 @@
                 @csrf
                 <input type="hidden" name="package_option">
                 <input type="hidden" name="name">
+<<<<<<< HEAD
                 <input type="hidden" name="email">
+=======
+>>>>>>> projek_kedua/master
                 <input type="hidden" name="passport_no">
                 <input type="hidden" name="passport_issued_date">
                 <input type="hidden" name="passport_issued_place">
@@ -224,11 +269,49 @@
 
     @push('scripts')
         <script>
+<<<<<<< HEAD
+=======
+            let currentPhotoData = null;
+
+>>>>>>> projek_kedua/master
             function getVal(name) {
                 const el = document.querySelector('[name="' + name + '"]');
                 return el ? el.value : '';
             }
 
+<<<<<<< HEAD
+=======
+            const DATE_FIELDS = ['passport_issued_date', 'passport_start_date', 'passport_expiry_date', 'birth_date'];
+
+            function dateToBackend(d) {
+                if (!d) return '';
+                const p = d.split('/');
+                return p.length === 3 ? p[2] + '-' + p[1] + '-' + p[0] : d;
+            }
+
+            function dateToDisplay(iso) {
+                if (!iso) return '';
+                const p = iso.split('-');
+                return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso;
+            }
+
+            function convertFormDates() {
+                DATE_FIELDS.forEach(function(name) {
+                    const el = document.querySelector('[name="' + name + '"]');
+                    if (el) el.value = dateToBackend(el.value);
+                });
+            }
+
+            function restoreDisplayDates() {
+                DATE_FIELDS.forEach(function(name) {
+                    const el = document.querySelector('[name="' + name + '"]');
+                    if (el && el.value && el.value.indexOf('-') > 0) {
+                        el.value = dateToDisplay(el.value);
+                    }
+                });
+            }
+
+>>>>>>> projek_kedua/master
             function getEmergencyContacts() {
                 const items = document.querySelectorAll('.emergency-contact-item');
                 const contacts = [];
@@ -289,6 +372,7 @@
                     package_option: getVal('package_option'),
                     name: getVal('name'),
                     passport_no: getVal('passport_no'),
+<<<<<<< HEAD
                     passport_issued_date: getVal('passport_issued_date'),
                     passport_issued_place: getVal('passport_issued_place'),
                     passport_start_date: getVal('passport_start_date'),
@@ -329,6 +413,14 @@
                     passport_expiry_date: getVal('passport_expiry_date'),
                     birth_place: getVal('birth_place'),
                     birth_date: getVal('birth_date'),
+=======
+                    passport_issued_date: dateToBackend(getVal('passport_issued_date')),
+                    passport_issued_place: getVal('passport_issued_place'),
+                    passport_start_date: dateToBackend(getVal('passport_start_date')),
+                    passport_expiry_date: dateToBackend(getVal('passport_expiry_date')),
+                    birth_place: getVal('birth_place'),
+                    birth_date: dateToBackend(getVal('birth_date')),
+>>>>>>> projek_kedua/master
                     gender: getVal('gender'),
                     address: getVal('address'),
                     job: getVal('job'),
@@ -337,7 +429,11 @@
                     mahram_name: getVal('mahram_name'),
                     mahram_relation: getVal('mahram_relation'),
                     umrah_experience: getVal('umrah_experience'),
+<<<<<<< HEAD
                     photo_data: photoData
+=======
+                    photo_data: currentPhotoData
+>>>>>>> projek_kedua/master
                 };
 
                 fetch('{{ route('admin.registrants.preview') }}', {
@@ -355,14 +451,24 @@
 
             function submitPreview() {
                 const form = document.getElementById('previewPostForm');
+<<<<<<< HEAD
                 const names = ['package_option', 'name', 'email', 'passport_no', 'passport_issued_date', 'passport_issued_place',
+=======
+                const names = ['package_option', 'name', 'passport_no', 'passport_issued_date', 'passport_issued_place',
+>>>>>>> projek_kedua/master
                     'passport_start_date', 'passport_expiry_date', 'birth_place', 'birth_date', 'gender', 'address', 'job',
                     'phone', 'mahram_name',
                     'mahram_relation', 'umrah_experience'
                 ];
                 names.forEach(n => {
+<<<<<<< HEAD
                     const input = form.querySelector('[name="' + n + '"]');
                     input.value = document.querySelector('[name="' + n + '"]').value || '';
+=======
+                    let v = document.querySelector('[name="' + n + '"]').value || '';
+                    if (DATE_FIELDS.includes(n)) v = dateToBackend(v);
+                    form.querySelector('[name="' + n + '"]').value = v;
+>>>>>>> projek_kedua/master
                 });
                 const emergInput = form.querySelector('[name="emergency_contacts"]');
                 emergInput.value = JSON.stringify(getEmergencyContacts());
@@ -381,6 +487,7 @@
                 const data = {
                     package_option: getVal('package_option'),
                     name: getVal('name'),
+<<<<<<< HEAD
                     email: getVal('email'),
                     passport_no: getVal('passport_no'),
                     passport_issued_date: getVal('passport_issued_date'),
@@ -389,6 +496,15 @@
                     passport_expiry_date: getVal('passport_expiry_date'),
                     birth_place: getVal('birth_place'),
                     birth_date: getVal('birth_date'),
+=======
+                    passport_no: getVal('passport_no'),
+                    passport_issued_date: dateToBackend(getVal('passport_issued_date')),
+                    passport_issued_place: getVal('passport_issued_place'),
+                    passport_start_date: dateToBackend(getVal('passport_start_date')),
+                    passport_expiry_date: dateToBackend(getVal('passport_expiry_date')),
+                    birth_place: getVal('birth_place'),
+                    birth_date: dateToBackend(getVal('birth_date')),
+>>>>>>> projek_kedua/master
                     gender: getVal('gender'),
                     address: getVal('address'),
                     job: getVal('job'),
@@ -396,6 +512,7 @@
                     emergency_contacts: getEmergencyContacts(),
                     mahram_name: getVal('mahram_name'),
                     mahram_relation: getVal('mahram_relation'),
+<<<<<<< HEAD
                     umrah_experience: getVal('umrah_experience')
                 };
 
@@ -411,6 +528,13 @@
                 } else {
                     doPrintPDF(data);
                 }
+=======
+                    umrah_experience: getVal('umrah_experience'),
+                    photo_data: currentPhotoData
+                };
+
+                doPrintPDF(data);
+>>>>>>> projek_kedua/master
             }
 
             function doPrintPDF(data) {
@@ -472,18 +596,45 @@
             function loadPhotoPreview(e) {
                 const file = e.target.files[0];
                 if (!file) return;
+<<<<<<< HEAD
                 // Read file as base64 for preview
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     updatePreviewWithPhoto(event.target.result);
+=======
+                const maxSize = 5 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    alert('Ukuran foto maksimal 5 MB.');
+                    e.target.value = '';
+                    return;
+                }
+                const allowedTypes = ['image/png', 'image/jpeg'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Format foto harus PNG, JPG, atau JPEG.');
+                    e.target.value = '';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    currentPhotoData = event.target.result;
+                    updatePreview();
+>>>>>>> projek_kedua/master
                 };
                 reader.readAsDataURL(file);
             }
 
+<<<<<<< HEAD
             // Add form submit handler to populate emergency_contacts
             document.getElementById('regForm').addEventListener('submit', function(e) {
                 const emergencyContactsData = getEmergencyContacts();
                 document.getElementById('emergency_contacts_input').value = JSON.stringify(emergencyContactsData);
+=======
+            // Add form submit handler to populate emergency_contacts and convert dates
+            document.getElementById('regForm').addEventListener('submit', function(e) {
+                const emergencyContactsData = getEmergencyContacts();
+                document.getElementById('emergency_contacts_input').value = JSON.stringify(emergencyContactsData);
+                convertFormDates();
+>>>>>>> projek_kedua/master
             });
 
             // Enable Cetak PDF button
@@ -498,6 +649,19 @@
             document.getElementById('regForm').addEventListener('input', enablePrintButton);
             document.getElementById('regForm').addEventListener('change', enablePrintButton);
 
+<<<<<<< HEAD
+=======
+            // Init flatpickr
+            document.querySelectorAll('.flatpickr-date').forEach(function(el) {
+                flatpickr(el, {
+                    locale: 'id',
+                    dateFormat: 'd/m/Y',
+                    allowInput: true,
+                    onChange: function() { el.dispatchEvent(new Event('change')); }
+                });
+            });
+
+>>>>>>> projek_kedua/master
             // init
             updatePreview();
         </script>

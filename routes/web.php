@@ -160,6 +160,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin', 'admin.n
         Route::delete('/{banner}',       [BannerAdminController::class, 'destroy'])->name('destroy');
     });
 
+        Route::post('/preview-content', [ReceiptAdminController::class, 'previewContent'])->name('preview-content');
+        Route::get('/{receipt}', [ReceiptAdminController::class, 'show'])->name('show');
+    });
+
     // ── About / Site Settings ──────────────────────────────────
     Route::prefix('about')->name('about.')->group(function () {
         Route::get('/',  [AboutAdminController::class, 'index'])->name('index');

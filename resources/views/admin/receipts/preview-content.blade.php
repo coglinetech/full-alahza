@@ -135,242 +135,137 @@
     $rawAmount = preg_replace('/[^0-9]/', '', $d['amount_text'] ?? '');
     $amountValue = $rawAmount === '' ? 0 : (int) $rawAmount;
     $terbilang = $amountValue > 0 ? ucfirst(trim($numberToWords($amountValue))) . ' Rupiah' : '-';
-    $title = 'Kuitansi_' . ($d['payer_name'] ?? 'GustiGlobal');
 @endphp
-<html lang="id">
+<style>
+    .receipt-preview * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-<head>
-<<<<<<< HEAD
-    <title>Kuitansi_{{ $d['payer_name'] ?? 'GustiGlobal' }}</title>
-=======
-    <meta charset="UTF-8">
-    <title>{{ $title }}</title>
->>>>>>> projek_kedua/master
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    .receipt-preview {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 9pt;
+        color: #111;
+    }
 
-        @page {
-            size: A4;
-            margin: 10mm;
-        }
+    .receipt-preview .page {
+        width: 100%;
+        background: white;
+        padding: 2mm;
+    }
 
-        html,
-        body {
-            width: 100%;
-            min-height: 100%;
-            background: #f5f5f5;
-<<<<<<< HEAD
-            font-family: 'Times New Roman', Times, serif;
-=======
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 9pt;
->>>>>>> projek_kedua/master
-            color: #111;
-        }
+    .receipt-preview .receipt-frame {
+        border: 2px solid #111;
+        padding: 16px;
+        width: 100%;
+    }
 
-        body {
-            padding: 0;
-        }
+    .receipt-preview .header {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 8px;
+    }
 
-        .page {
-            width: 210mm;
-            min-height: 297mm;
-            background: white;
-            margin: 6mm auto;
-            padding: 2mm;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
-        }
+    .receipt-preview .header-logo img {
+        width: 70px;
+        object-fit: contain;
+    }
 
-        .receipt-frame {
-            border: 2px solid #111;
-            padding: 20px;
-            width: 100%;
-        }
+    .receipt-preview .company-info {
+        text-align: left;
+        font-size: 9pt;
+        line-height: 1;
+    }
 
-        .header {
-            display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
-            gap: 20px;
-            margin-bottom: 10px;
-        }
+    .receipt-preview .company-name {
+        font-size: 12pt;
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
 
-        .header-logo img {
-<<<<<<< HEAD
-            width: 80px;
-=======
-            width: 70px;
->>>>>>> projek_kedua/master
-            object-fit: contain;
-        }
+    .receipt-preview .receipt-title {
+        text-align: center;
+        font-size: 11pt;
+        font-weight: bold;
+        margin: 2px 0 4px;
+        background: #FFD700;
+        color: #000;
+        padding: 4px 0;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
 
-        .company-info {
-            text-align: left;
-<<<<<<< HEAD
-            font-size: 10pt;
-=======
-            font-size: 9pt;
->>>>>>> projek_kedua/master
-            line-height: 1;
-        }
+    .receipt-preview .divider {
+        border-top: 1.5px solid #111;
+        margin-bottom: 12px;
+    }
 
-        .company-name {
-<<<<<<< HEAD
-            font-size: 14pt;
-=======
-            font-size: 12pt;
->>>>>>> projek_kedua/master
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
+    .receipt-preview .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
 
-        .receipt-title {
-            text-align: center;
-<<<<<<< HEAD
-            font-size: 18pt;
-            font-weight: bold;
-            margin: 16px 0 6px;
-        }
+    .receipt-preview .info-table td {
+        vertical-align: top;
+        padding: 4px 4px;
+        font-size: 9pt;
+        line-height: 1;
+    }
 
-        .divider {
-            border-top: 1.8px solid #111;
-            margin-bottom: 18px;
-=======
-            font-size: 11pt;
-            font-weight: bold;
-            margin: 2px 0 4px;
-            background: #FFD700;
-            color: #000;
-            padding: 4px 0;
-            print-color-adjust: exact;
-            -webkit-print-color-adjust: exact;
-        }
+    .receipt-preview .info-label {
+        width: 28%;
+        font-weight: bold;
+    }
 
-        .divider {
-            border-top: 1.5px solid #111;
-            margin-bottom: 12px;
->>>>>>> projek_kedua/master
-        }
+    .receipt-preview .info-sep {
+        width: 3%;
+        text-align: center;
+    }
 
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 24px;
-        }
+    .receipt-preview .info-value {
+        width: 69%;
+    }
 
-        .info-table td {
-            vertical-align: top;
-<<<<<<< HEAD
-            padding: 6px 4px;
-            font-size: 11pt;
-=======
-            padding: 4px 4px;
-            font-size: 9pt;
->>>>>>> projek_kedua/master
-            line-height: 1;
-        }
+    .receipt-preview .info-value-terbilang {
+        width: 69%;
+        font-weight: bold;
+        font-style: italic;
+    }
 
-        .info-label {
-            width: 28%;
-            font-weight: bold;
-        }
+    .receipt-preview .signature-row {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 16px;
+    }
 
-        .info-sep {
-            width: 3%;
-            text-align: center;
-        }
+    .receipt-preview .signature-block {
+        min-width: 260px;
+        padding: 8px 0 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        text-align: right;
+        font-size: 9pt;
+    }
 
-        .info-value {
-            width: 69%;
-        }
+    .receipt-preview .signature-line {
+        height: 1px;
+        width: 100%;
+        background: #111;
+        margin: 24px 0 0;
+    }
 
-        .info-value-terbilang {
-            width: 69%;
-            font-weight: bold;
-            font-style: italic;
-        }
-
-<<<<<<< HEAD
-        .align-right {
-            text-align: right;
-        }
-
-        .footer {
-            width: 100%;
-            margin-top: 34px;
-            display: flex;
-            justify-content: flex-end;
-            font-size: 11pt;
-            line-height: 1.6;
-        }
-
-=======
->>>>>>> projek_kedua/master
-        .signature-row {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 16px;
-        }
-
-        .signature-block {
-            min-width: 260px;
-<<<<<<< HEAD
-            padding: 12px 0 0;
-=======
-            padding: 8px 0 0;
->>>>>>> projek_kedua/master
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            text-align: right;
-<<<<<<< HEAD
-            font-size: 11pt;
-        }
-
-        .signature-line {
-            height: 1px;
-            width: 100%;
-            background: #111;
-            margin: 24px 0 0;
-        }
-
-        .signature-title {
-            font-weight: bold;
-            margin-bottom: 16px;
-=======
-            font-size: 9pt;
->>>>>>> projek_kedua/master
-        }
-
-        @media print {
-
-            html,
-            body {
-                background: transparent;
-                margin: 0;
-            }
-
-            .page {
-                box-shadow: none;
-                margin: 0;
-                padding: 0mm;
-            }
-
-            .header,
-            .footer {
-                page-break-inside: avoid;
-            }
-        }
-    </style>
-</head>
-
-<body>
-<<<<<<< HEAD
+    .receipt-preview .signature-title {
+        font-weight: bold;
+        margin-bottom: 16px;
+    }
+</style>
+<div class="receipt-preview">
     <div class="page">
         <div class="receipt-frame">
             <div class="header">
@@ -379,22 +274,21 @@
                 </div>
                 <div class="company-info">
                     <div class="company-name">PT. GUSTI GLOBAL JOURNEY</div>
-                    <div>ASZ Building, Gusti Business District, Dusun Simpar RT. 064 RW. 028,</div>
-                    <div>Desa Panjalu,
-                        Kecamatan
-                        Panjalu, Kabupaten Ciamis</div>
-                    <div style="margin-top:8px; font-weight:600;">HP: 0811 2286 9911</div>
+                    <div style="margin-top:5px;">ASZ Building, Gusti Business District, Dusun Simpar RT. 064 RW. 028,
+                    </div>
+                    <div style="margin-top:5px;">Desa Panjalu, Kecamatan Panjalu, Kabupaten Ciamis</div>
+                    <div style="margin-top:5px;">HP: 0811 2286 9911</div>
                 </div>
             </div>
 
             <div class="receipt-title">KUITANSI PEMBAYARAN</div>
             <div class="divider"></div>
             <table class="info-table">
-                <tr>
+                {{-- <tr>
                     <td class="info-label">Nomor Kuitansi</td>
                     <td class="info-sep">:</td>
                     <td class="info-value">{{ $displayReceiptNumber }}</td>
-                </tr>
+                </tr> --}}
                 <tr>
                     <td class="info-label">Tanda Terima Dari</td>
                     <td class="info-sep">:</td>
@@ -425,15 +319,10 @@
             <div class="signature-row">
                 <div class="signature-block">
                     <div>{{ $formatDateWithDay($d['receipt_date'] ?? null) }}</div>
-                    <div style="margin-top:12px;">Bagian Keuangan,</div>
-                    <div style="margin-top:48px;">PT. GUSTI GLOBAL JOURNEY</div>
+                    <div>Bagian Keuangan,</div>
+                    <div style="margin-top:100px;">PT. GUSTI GLOBAL JOURNEY</div>
                 </div>
             </div>
         </div>
     </div>
-=======
-    @include('admin.receipts.preview-content', ['data' => $data])
->>>>>>> projek_kedua/master
-</body>
-
-</html>
+</div>

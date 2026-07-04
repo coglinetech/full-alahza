@@ -15,6 +15,8 @@
         </div>
     </div>
 
+    <div style="margin-bottom:8px;font-size:14px;font-weight:600;">Total Kuitansi: {{ $items->total() }}</div>
+
     <div class="card">
         <div class="card-body">
             <div class="table-wrap">
@@ -25,7 +27,11 @@
                             <th>Tanda Terima Dari</th>
                             <th>Uang Sejumlah</th>
                             <th>Tanggal</th>
+<<<<<<< HEAD
                             <th>Aksi</th>
+=======
+                            <th></th>
+>>>>>>> projek_kedua/master
                         </tr>
                     </thead>
                     <tbody>
@@ -34,6 +40,7 @@
                                 <td>{{ $item->display_receipt_number ?? '-' }}</td>
                                 <td>{{ $item->payer_name }}</td>
                                 <td>{{ $item->amount_text }}</td>
+<<<<<<< HEAD
                                 <td class="td-muted">{{ $item->receipt_date->format('Y-m-d') }}</td>
                                 <td class="td-actions">
                                     <div class="action-dropdown">
@@ -50,6 +57,21 @@
                                             </form>
                                         </div>
                                     </div>
+=======
+                                <td class="td-muted">{{ $item->receipt_date->format('d-m-Y') }}</td>
+                                <td class="td-actions">
+                                    <a href="{{ route('admin.receipts.edit', $item) }}"
+                                        class="btn btn-primary btn-sm">Edit</a>
+                                    <button type="button" class="btn btn-secondary btn-sm"
+                                        onclick="printPDFReceipt({{ $item->id }})">Cetak PDF</button>
+                                    <form action="{{ route('admin.receipts.destroy', $item) }}" method="POST"
+                                        style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Yakin ingin menghapus kuitansi ini?');">Hapus</button>
+                                    </form>
+>>>>>>> projek_kedua/master
                                 </td>
                             </tr>
                         @empty
@@ -61,6 +83,7 @@
                 </table>
             </div>
 
+<<<<<<< HEAD
             <div style="margin-top:12px">{{ $items->links() }}</div>
         </div>
     </div>
@@ -131,6 +154,13 @@
             });
         }, true);
 
+=======
+            <div style="margin-top:12px">{{ $items->links('vendor.pagination.admin') }}</div>
+        </div>
+    </div>
+
+    <script>
+>>>>>>> projek_kedua/master
         function printPDFReceipt(receiptId) {
             const iframe = document.createElement('iframe');
             iframe.style.display = 'none';

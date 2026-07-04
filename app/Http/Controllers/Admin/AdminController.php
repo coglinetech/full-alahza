@@ -18,6 +18,7 @@ class AdminController extends Controller
             'testimonials' => Testimonial::count(),
             'gallery'      => GalleryImage::count(),
             'faqs'         => Faq::count(),
+<<<<<<< HEAD
             'banners'      => Banner::count(),
         ];
         $recentPackages     = Package::latest()->take(5)->get();
@@ -25,5 +26,12 @@ class AdminController extends Controller
         $recentBanners      = Banner::latest()->take(5)->get();
 
         return view('admin.dashboard', compact('stats', 'recentPackages', 'recentTestimonials', 'recentBanners'));
+=======
+        ];
+        $recentPackages     = Package::latest()->take(5)->get();
+        $recentTestimonials = Testimonial::latest()->take(5)->get();
+
+        return view('admin.dashboard', compact('stats', 'recentPackages', 'recentTestimonials'));
+>>>>>>> projek_kedua/master
     }
 }

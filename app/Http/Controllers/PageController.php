@@ -28,8 +28,11 @@ class PageController extends Controller
             ->take(12)
             ->values();
 
+<<<<<<< HEAD
         $banners = Banner::active()->ordered('asc', 'sort_order')->get();
 
+=======
+>>>>>>> projek_kedua/master
         $aboutImage = SiteSetting::getValue('about_image_path');
         if (!empty($aboutImage) && !Storage::disk('public')->exists($aboutImage)) {
             $aboutImage = null;
@@ -40,8 +43,12 @@ class PageController extends Controller
             'testimonials',
             'faqs',
             'gallery',
+<<<<<<< HEAD
             'aboutImage',
             'banners'
+=======
+            'aboutImage'
+>>>>>>> projek_kedua/master
         ));
     }
 

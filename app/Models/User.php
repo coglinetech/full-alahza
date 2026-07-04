@@ -12,6 +12,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -48,9 +49,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+<<<<<<< HEAD
 
     public function registrant()
     {
         return $this->hasOne(Registrant::class);
     }
+=======
+>>>>>>> projek_kedua/master
 }

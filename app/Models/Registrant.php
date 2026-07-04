@@ -11,6 +11,7 @@ class Registrant extends Model
 
     protected $fillable = [
         'user_id', 'email', 'package_option', 'name', 'passport_no', 'passport_issued_date', 'passport_issued_place', 'passport_start_date', 'passport_expiry_date',
+        'package_option', 'name', 'passport_no', 'passport_issued_date', 'passport_issued_place', 'passport_start_date', 'passport_expiry_date',
         'birth_place', 'birth_date', 'gender', 'address', 'job', 'phone', 'emergency_contacts',
         'mahram_name', 'mahram_relation', 'umrah_experience', 'photo_path', 'documents'
     ];
@@ -23,9 +24,12 @@ class Registrant extends Model
         'passport_expiry_date' => 'date',
         'birth_date' => 'date',
     ];
+<<<<<<< HEAD
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+=======
+>>>>>>> projek_kedua/master
 }
