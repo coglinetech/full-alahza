@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Registrant;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class RegistrantAdminController extends Controller
@@ -28,6 +30,7 @@ class RegistrantAdminController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'email' => 'nullable|email',
             'package_option' => 'nullable|string',
             'name' => 'required|string|max:255',
             'passport_no' => 'nullable|string|max:255',
@@ -72,7 +75,13 @@ class RegistrantAdminController extends Controller
 
     public function update(Request $request, Registrant $registrant)
     {
+        $emailRule = 'nullable|email';
+        if ($registrant->user_id) {
+            $emailRule = 'nullable|email|unique:users,email,' . $registrant->user_id;
+        }
+
         $data = $request->validate([
+            'email' => $emailRule,
             'package_option' => 'nullable|string',
             'name' => 'required|string|max:255',
             'passport_no' => 'nullable|string|max:255',
@@ -116,6 +125,13 @@ class RegistrantAdminController extends Controller
 
         $registrant->update($data);
 
+        if ($registrant->user_id && isset($data['email'])) {
+            $user = User::find($registrant->user_id);
+            if ($user && $user->email !== $data['email']) {
+                $user->update(['email' => $data['email']]);
+            }
+        }
+
         return redirect()->route('admin.registrants.index')->with('success', 'Data pendaftar berhasil diupdate.');
     }
 
@@ -149,6 +165,68 @@ class RegistrantAdminController extends Controller
             $data['emergency_contacts'] = [];
         }
         return view('admin.registrants.preview', ['data' => $data]);
+    }
+
+    public function account(Registrant $registrant)
+    {
+        return view('admin.registrants.account', compact('registrant'));
+    }
+
+    public function storeAccount(Request $request, Registrant $registrant)
+    {
+        $request->validate([
+            'password' => 'required|min:6',
+        ]);
+
+        if (!$registrant->email) {
+            return back()->withErrors(['email' => 'Jamaah belum memiliki email. Silakan edit data jamaah terlebih dahulu.']);
+        }
+
+        if (User::where('email', $registrant->email)->exists()) {
+            return back()->withErrors(['email' => 'Email ini sudah terdaftar sebagai pengguna.']);
+        }
+
+        $user = User::create([
+            'name' => $registrant->name,
+            'email' => $registrant->email,
+            'password' => Hash::make($request->password),
+            'role' => 'user'
+        ]);
+
+        $registrant->update(['user_id' => $user->id]);
+
+        return back()->with('success', 'Akun mobile berhasil dibuat.');
+    }
+
+    public function updateAccount(Request $request, Registrant $registrant)
+    {
+        $request->validate([
+            'password' => 'required|min:6',
+        ]);
+
+        if ($registrant->user_id) {
+            $user = User::find($registrant->user_id);
+            if ($user) {
+                $user->update([
+                    'password' => Hash::make($request->password)
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Password akun berhasil diubah.');
+    }
+
+    public function destroyAccount(Registrant $registrant)
+    {
+        if ($registrant->user_id) {
+            $user = User::find($registrant->user_id);
+            if ($user) {
+                $user->delete();
+            }
+            $registrant->update(['user_id' => null]);
+        }
+
+        return back()->with('success', 'Akun mobile berhasil dihapus.');
     }
 
     public function destroy(Registrant $registrant)

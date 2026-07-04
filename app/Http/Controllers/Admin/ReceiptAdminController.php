@@ -38,7 +38,7 @@ class ReceiptAdminController extends Controller
         ]);
 
         $data['receipt_number'] = $this->normalizeReceiptNumber($data['receipt_number'] ?? '');
-        $data['admin_name'] = '';
+        $data['admin_name'] = auth()->user()->name;
 
         Receipt::create($data);
 
@@ -57,7 +57,7 @@ class ReceiptAdminController extends Controller
         ]);
 
         $data['receipt_number'] = $this->normalizeReceiptNumber($data['receipt_number'] ?? '');
-        $data['admin_name'] = '';
+        $data['admin_name'] = auth()->user()->name;
 
         $receipt->update($data);
 

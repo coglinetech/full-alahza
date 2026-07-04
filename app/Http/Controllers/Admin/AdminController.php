@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Package;
 use App\Models\Testimonial;
 use App\Models\GalleryImage;
@@ -17,10 +18,12 @@ class AdminController extends Controller
             'testimonials' => Testimonial::count(),
             'gallery'      => GalleryImage::count(),
             'faqs'         => Faq::count(),
+            'banners'      => Banner::count(),
         ];
         $recentPackages     = Package::latest()->take(5)->get();
         $recentTestimonials = Testimonial::latest()->take(5)->get();
+        $recentBanners      = Banner::latest()->take(5)->get();
 
-        return view('admin.dashboard', compact('stats', 'recentPackages', 'recentTestimonials'));
+        return view('admin.dashboard', compact('stats', 'recentPackages', 'recentTestimonials', 'recentBanners'));
     }
 }

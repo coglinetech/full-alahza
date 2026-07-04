@@ -9,6 +9,7 @@ use App\Http\Controllers\PageController;
 
 // Controllers — Admin
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\BannerAdminController;
 use App\Http\Controllers\Admin\PackageAdminController;
 use App\Http\Controllers\Admin\TestimonialAdminController;
 use App\Http\Controllers\Admin\GalleryAdminController;
@@ -130,6 +131,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin', 'admin.n
         Route::put('/{registrant}', [RegistrantAdminController::class, 'update'])->name('update');
         Route::delete('/{registrant}', [RegistrantAdminController::class, 'destroy'])->name('destroy');
         Route::post('/preview', [RegistrantAdminController::class, 'preview'])->name('preview');
+        Route::get('/{registrant}/account', [RegistrantAdminController::class, 'account'])->name('account');
+        Route::post('/{registrant}/account', [RegistrantAdminController::class, 'storeAccount'])->name('store_account');
+        Route::put('/{registrant}/account', [RegistrantAdminController::class, 'updateAccount'])->name('update_account');
+        Route::delete('/{registrant}/account', [RegistrantAdminController::class, 'destroyAccount'])->name('destroy_account');
         Route::get('/{registrant}', [RegistrantAdminController::class, 'show'])->name('show');
     });
 
@@ -142,6 +147,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin', 'admin.n
         Route::delete('/{receipt}', [ReceiptAdminController::class, 'destroy'])->name('destroy');
         Route::post('/preview', [ReceiptAdminController::class, 'preview'])->name('preview');
         Route::get('/{receipt}', [ReceiptAdminController::class, 'show'])->name('show');
+    });
+
+    // ── Banners ────────────────────────────────────────────────
+    Route::prefix('banners')->name('banners.')->group(function () {
+        Route::get('/',                  [BannerAdminController::class, 'index'])->name('index');
+        Route::get('/create',            [BannerAdminController::class, 'create'])->name('create');
+        Route::post('/',                 [BannerAdminController::class, 'store'])->name('store');
+        Route::get('/{banner}/edit',     [BannerAdminController::class, 'edit'])->name('edit');
+        Route::put('/{banner}',          [BannerAdminController::class, 'update'])->name('update');
+        Route::patch('/{banner}/toggle', [BannerAdminController::class, 'toggle'])->name('toggle');
+        Route::delete('/{banner}',       [BannerAdminController::class, 'destroy'])->name('destroy');
     });
 
     // ── About / Site Settings ──────────────────────────────────
@@ -161,6 +177,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'is_admin', 'admin.n
 
     Route::put('/password', function (\Illuminate\Http\Request $request) {
         $request->validate([
+            'current_password' => ['required', 'current_password'],
             'new_password' => ['required', 'min:8', 'confirmed'],
         ]);
 

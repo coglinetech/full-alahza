@@ -33,6 +33,25 @@ class ImageUploadService
         return $filename;
     }
 
+    public function storeCover(UploadedFile $file, string $directory, int $width, int $height): string
+    {
+        $directory = trim($directory, '/');
+        Storage::disk('public')->makeDirectory($directory);
+
+        $extension = $this->normalizedExtension($file->getClientOriginalExtension());
+        $filename = $directory . '/' . Str::uuid() . '.' . $extension;
+        $fullPath = Storage::disk('public')->path($filename);
+
+        $image = ImageManager::usingDriver(\Intervention\Image\Drivers\Gd\Driver::class)
+            ->decode($file->getRealPath());
+
+        $image->cover($width, $height);
+
+        $image->encode($this->buildEncoder($extension))->save($fullPath);
+
+        return $filename;
+    }
+
     public function deleteFromPublicDisk(?string $path): void
     {
         if (!empty($path)) {

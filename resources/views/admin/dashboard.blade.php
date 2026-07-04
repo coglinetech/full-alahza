@@ -240,6 +240,16 @@
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
         </div>
     </div>
+    <div class="dash-stat" style="border-top:2px solid #d97706;">
+        <div>
+            <div class="dash-stat-label">Banner Iklan</div>
+            <div class="dash-stat-val">{{ $stats['banners'] }}</div>
+            <div class="dash-stat-sub">Banner ditampilkan</div>
+        </div>
+        <div class="dash-stat-icon" style="background:rgba(217,119,6,0.07);color:#d97706;">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+    </div>
 </div>
 
 {{-- ROW 1: Paket + Testimoni --}}
@@ -306,6 +316,38 @@
         @endforelse
     </div>
 
+</div>
+
+{{-- ROW 2: Banner --}}
+<div class="dash-grid" style="margin-bottom:14px;">
+    <div class="dash-card">
+        <div class="dash-card-head">
+            <div class="dash-card-title">
+                <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                Banner Iklan Terbaru
+            </div>
+            <a href="{{ route('admin.banners.index') }}" class="btn btn-ghost btn-sm">Lihat semua →</a>
+        </div>
+        @forelse($recentBanners as $b)
+        <div style="display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line-soft);">
+            <div style="width:60px;height:34px;border-radius:5px;overflow:hidden;flex-shrink:0;background:var(--line-soft);border:1px solid var(--line);">
+                @if(has_media($b->image_path))
+                    <img src="{{ media_url($b->image_path) }}" alt="{{ $b->title }}" style="width:100%;height:100%;object-fit:cover;">
+                @else
+                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-3);">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                @endif
+            </div>
+            <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:600;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ $b->title }}</div>
+                <div style="font-size:11px;color:var(--text-3);">{{ $b->is_active ? 'Aktif' : 'Nonaktif' }}</div>
+            </div>
+        </div>
+        @empty
+        <div class="dash-empty">Belum ada banner ditambahkan.</div>
+        @endforelse
+    </div>
 </div>
 
 @endsection

@@ -11,8 +11,8 @@
                 <div class="why-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15l-2 5l9-11h-5l2-5l-9 11h5z"/></svg>
                 </div>
-                <div class="why-title">Pengalaman Lebih dari 10 Tahun</div>
-                <p class="why-desc">Ribuan jamaah sudah kami berangkatkan sejak awal berdiri. Bukan sekadar angka — setiap jamaah adalah amanah yang kami jaga sampai kembali ke tanah air.</p>
+                <div class="why-title">Tim Berpengalaman</div>
+                <p class="why-desc">Didukung oleh tim manajemen dan pembimbing yang berpengalaman melayani tamu Allah. Setiap jamaah adalah amanah yang kami jaga dengan sepenuh hati sampai kembali ke tanah air.</p>
             </div>
             <div class="why-card reveal" style="transition-delay:0.2s">
                 <div class="why-icon">

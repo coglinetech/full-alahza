@@ -273,29 +273,83 @@
             background: rgba(220, 38, 38, 0.07);
         }
 
-        .sb-ganti-pw {
+        .sb-user-menu {
+            position: relative;
+            flex-shrink: 0;
+        }
+        .sb-user-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.3);
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 9px;
-            padding: 8px 9px;
-            border-radius: var(--r);
-            color: rgba(255, 255, 255, 0.28);
-            font-size: 12px;
-            text-decoration: none;
-            transition: color 0.15s, background 0.15s;
-            width: 100%;
+            justify-content: center;
+            transition: background 0.15s, color 0.15s;
         }
-        .sb-ganti-pw svg {
+        .sb-user-btn:hover {
+            background: rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.6);
+        }
+        .sb-user-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            stroke: none;
+        }
+        .sb-user-dropdown {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 6px);
+            right: 0;
+            background: #1c1b19;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 4px;
+            min-width: 170px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            z-index: 300;
+            overflow: hidden;
+        }
+        .sb-user-dropdown.open {
+            display: block;
+        }
+        .sb-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: background 0.12s, color 0.12s;
+            border: none;
+            background: none;
+            font-family: inherit;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .sb-dropdown-item svg {
             width: 13px;
             height: 13px;
-            flex-shrink: 0;
             stroke: currentColor;
             fill: none;
             stroke-width: 1.75;
+            flex-shrink: 0;
         }
-        .sb-ganti-pw:hover {
-            color: rgba(255, 255, 255, 0.75);
-            background: rgba(255, 255, 255, 0.04);
+        .sb-dropdown-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.75);
+        }
+        .sb-dropdown-danger:hover {
+            color: #fca5a5;
+            background: rgba(220,38,38,0.1);
         }
 
         /* overlay mobile */
@@ -1269,6 +1323,16 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('admin.banners.index') }}"
+                            class="{{ request()->routeIs('admin.banners.*') ? 'active' : '' }}">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="2" y="3" width="20" height="14" rx="2" />
+                                <path d="M8 21h8M12 17v4" />
+                            </svg>
+                            Banner Iklan
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('admin.about.index') }}"
                             class="{{ request()->routeIs('admin.about.*') ? 'active' : '' }}">
                             <svg viewBox="0 0 24 24">
@@ -1285,27 +1349,29 @@
         <div class="sb-footer">
             <div class="sb-user">
                 <div class="sb-avatar">{{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}</div>
-                <div style="overflow:hidden;">
+                <div style="overflow:hidden;flex:1;min-width:0;">
                     <div class="sb-uname">{{ auth()->user()->name ?? 'Admin' }}</div>
                     <div class="sb-urole">Administrator</div>
                 </div>
+                <div class="sb-user-menu" id="sbUserMenu">
+                    <button class="sb-user-btn" onclick="toggleUserMenu()" title="Menu">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    </button>
+                    <div class="sb-user-dropdown" id="sbUserDropdown">
+                        <a href="{{ route('admin.password') }}" class="sb-dropdown-item">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            Ganti Password
+                        </a>
+                        <form method="POST" action="{{ route('admin.logout') }}">
+                            @csrf
+                            <button type="submit" class="sb-dropdown-item sb-dropdown-danger">
+                                <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                                Keluar
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <a href="{{ route('admin.password') }}" class="sb-ganti-pw">
-                <svg viewBox="0 0 24 24">
-                    <rect x="3" y="11" width="18" height="11" rx="2" />
-                    <path d="M7 11V7a5 5 0 0110 0v4" />
-                </svg>
-                Ganti Password
-            </a>
-            <form method="POST" action="{{ route('admin.logout') }}">
-                @csrf
-                <button type="submit" class="sb-logout">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
-                    </svg>
-                    Keluar
-                </button>
-            </form>
         </div>
     </aside>
 
@@ -1393,6 +1459,17 @@
     </div>
 
     <script>
+        function toggleUserMenu() {
+            const el = document.getElementById('sbUserDropdown');
+            el.classList.toggle('open');
+        }
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('sbUserMenu');
+            if (menu && !menu.contains(e.target)) {
+                document.getElementById('sbUserDropdown')?.classList.remove('open');
+            }
+        });
+
         function openSidebar() {
             document.getElementById('sidebar').classList.add('open');
             document.getElementById('sbOverlay').classList.add('open');

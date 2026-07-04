@@ -6,8 +6,12 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\RegistrationController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\JamaahProfileController;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\BannerController;
 
 // Public routes
+Route::get('/banners', [BannerController::class, 'index']);
 Route::get('/packages', [PackageController::class, 'index']);
 Route::get('/packages/{slug}', [PackageController::class, 'show']);
 Route::get('/packages/{packageId}/departures', [PackageController::class, 'departures']);
@@ -29,4 +33,21 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/payments', [PaymentController::class, 'index']);
     Route::post('/payments/create', [PaymentController::class, 'create']);
+
+    Route::get('/jamaah/profile', [JamaahProfileController::class, 'show']);
+    Route::put('/jamaah/profile', [JamaahProfileController::class, 'store']);
+    Route::post('/jamaah/profile', [JamaahProfileController::class, 'store']); // Allow POST to mimic PUT with files
+
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::put('/profile', [ProfileController::class, 'update']);
+
+   
 });
+
+ // Quran routes
+    Route::get('/quran/surahs', [\App\Http\Controllers\Api\QuranController::class, 'index']);
+    Route::get('/quran/surahs/{surah_id}', [\App\Http\Controllers\Api\QuranController::class, 'show']);
+
+// Doa routes
+Route::get('/doas', [\App\Http\Controllers\Api\DoaController::class, 'index']);
+Route::get('/doas/{id}', [\App\Http\Controllers\Api\DoaController::class, 'show']);

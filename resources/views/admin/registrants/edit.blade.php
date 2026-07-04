@@ -49,7 +49,12 @@
 
                     <label class="form-group">
                         <span>Nama sesuai Paspor</span>
-                        <input type="text" name="name" value="{{ $registrant->name }}" oninput="updatePreview()">
+                        <input type="text" name="name" value="{{ old('name', $registrant->name) }}" oninput="updatePreview()">
+                    </label>
+
+                    <label class="form-group">
+                        <span>Email (Opsional untuk login aplikasi)</span>
+                        <input type="email" name="email" value="{{ old('email', $registrant->email) }}" oninput="updatePreview()">
                     </label>
 
                     <label class="form-group">
@@ -263,6 +268,7 @@
                 @csrf
                 <input type="hidden" name="package_option">
                 <input type="hidden" name="name">
+                <input type="hidden" name="email">
                 <input type="hidden" name="passport_no">
                 <input type="hidden" name="passport_issued_date">
                 <input type="hidden" name="passport_issued_place">
@@ -357,6 +363,7 @@
                 const data = {
                     package_option: getVal('package_option'),
                     name: getVal('name'),
+                    email: getVal('email'),
                     passport_no: getVal('passport_no'),
                     passport_issued_date: getVal('passport_issued_date'),
                     passport_issued_place: getVal('passport_issued_place'),
@@ -390,7 +397,7 @@
 
             function submitPreview() {
                 const form = document.getElementById('previewPostForm');
-                const names = ['package_option', 'name', 'passport_no', 'passport_issued_date', 'passport_issued_place',
+                const names = ['package_option', 'name', 'email', 'passport_no', 'passport_issued_date', 'passport_issued_place',
                     'passport_start_date', 'passport_expiry_date', 'birth_place', 'birth_date', 'gender', 'address', 'job',
                     'phone', 'mahram_name',
                     'mahram_relation', 'umrah_experience'
@@ -423,6 +430,7 @@
                 const data = {
                     package_option: getVal('package_option'),
                     name: getVal('name'),
+                    email: getVal('email'),
                     passport_no: getVal('passport_no'),
                     passport_issued_date: getVal('passport_issued_date'),
                     passport_issued_place: getVal('passport_issued_place'),

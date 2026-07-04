@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             PackageSeeder::class,
             TestimonialSeeder::class,
             FaqSeeder::class,
+            SurahSeeder::class,
         ]);
     }
 }

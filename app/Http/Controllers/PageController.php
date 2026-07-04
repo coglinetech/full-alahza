@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banner;
 use App\Models\Package;
 use App\Models\Testimonial;
 use App\Models\Faq;
@@ -27,6 +28,8 @@ class PageController extends Controller
             ->take(12)
             ->values();
 
+        $banners = Banner::active()->ordered('asc', 'sort_order')->get();
+
         $aboutImage = SiteSetting::getValue('about_image_path');
         if (!empty($aboutImage) && !Storage::disk('public')->exists($aboutImage)) {
             $aboutImage = null;
@@ -37,7 +40,8 @@ class PageController extends Controller
             'testimonials',
             'faqs',
             'gallery',
-            'aboutImage'
+            'aboutImage',
+            'banners'
         ));
     }
 

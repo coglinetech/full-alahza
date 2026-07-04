@@ -2,6 +2,7 @@
 
 @section('content')
     @include('sections.hero')
+    @include('sections.banner', ['banners' => $banners])
     @include('sections.packages', ['packages' => $packages])
     @include('sections.why-us')
     @include('sections.about')
